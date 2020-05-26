@@ -1,0 +1,8 @@
+;comment opcode
+;*advanced comment test*; opcode
+;*more line advanced comment test
+test
+test
+close test*; opcode
+this a new opcode
+;*segmented comment test*; opcode1 ;*comment 2*; opcode2 ;*comment 2*; opcode 3
