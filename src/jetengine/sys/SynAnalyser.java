@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import jetengine.sys.frontcon.Editor;
+import jetengine.sys.event.Editor;
 
 public class SynAnalyser {
 
@@ -37,9 +37,17 @@ public class SynAnalyser {
 		};
 		timer.schedule(task, 750);
 	}
+	/**
+	 * 
+	 * @param text the text that should be analysed
+	 * @param back weather or not the editor should get a text backup
+	 */
 	
-	@SuppressWarnings("resource")
 	public void analyse(String text, boolean back) {
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 		System.out.println("--------------------------");
 		System.out.println("SynAnalyser: " + editor.getEditorName());
 		System.out.println("--------------------------");
@@ -130,7 +138,7 @@ public class SynAnalyser {
 			}
 			String rawOpcode = "";
 			for (String s : op) rawOpcode = rawOpcode + s;
-			Scanner scan2 = new Scanner(rawOpcode);
+			Scanner scanCode = new Scanner(rawOpcode);
 			System.out.println("--- Scan Opcode ---");
 			/*
 			 * 0 = label
@@ -153,8 +161,8 @@ public class SynAnalyser {
 			}
 			String[] partsOrg = new String[6];
 			int index = 1;
-			while (scan2.hasNext()) {
-				String scans = scan2.next();
+			while (scanCode.hasNext()) {
+				String scans = scanCode.next();
 				System.out.println(scans);
 				if (index > 5) break;
 				if (scans.contains(":")) {
@@ -193,7 +201,9 @@ public class SynAnalyser {
 			System.out.println("arr4 " + partsOrg[4]);
 			System.out.println("arr5 " + partsOrg[5]);
 			codeParts.add(new CodeOpcode(comments, rawParts, rawback, partsOrg, line));
+			scanCode.close();
 		}
+		scanLine.close();
 		System.out.println("--- Assemble ---");
 		
 		for (CodePart part : codeParts) {
@@ -292,11 +302,11 @@ public class SynAnalyser {
 				offset+=rawback.length()+1;
 				return;
 			}
-			if (arg) {
-				mem.set(address, (byte) Integer.parseInt(op.getHex(), 16), offset, rawback.length() + 1, id);
-				offset+=rawback.length()+1;
-			}
 			if (!op1.startsWith("@")) {
+				if (arg) {
+					mem.set(address, (byte) Integer.parseInt(op.getHex(), 16), offset, rawback.length() + 1, id);
+					offset+=rawback.length()+1;
+				}
 				if (label != null) labelvals.put(label, ByteUtil.toHex(address, 4));
 				if (marker != null) {
 					if (labelvals.containsKey(marker + ":")) {
@@ -332,36 +342,39 @@ public class SynAnalyser {
 					mem.set(arg1!=null?address-1:address, (byte) Integer.parseInt(arg2, 16));
 					address++;
 				}
-			} else if (op1.equalsIgnoreCase("@begin")) {
-				if (arg1 == null || arg2 == null) {
-					err = true;
-					errs = Message.ERR_MISSING_ARG;
+			} else  {
+				offset+=rawback.length()+1;
+				if (op1.equalsIgnoreCase("@begin")) {
+					if (arg1 == null || arg2 == null) {
+						err = true;
+						errs = Message.ERR_MISSING_ARG;
+					} else {
+						address = Integer.parseInt(arg1+arg2);
+						SystemHandler.getExecuter().setStartAddress(address);
+					}
+				} else if (op1.equalsIgnoreCase("@equ")) {
+					if (label == null) {
+						err = true;
+						errs = Message.ERR_MISSING_LABEL;
+					} else if (arg1 == null) {
+						err = true;
+						errs = Message.ERR_MISSING_ARG;
+					} else if (arg2 == null) {
+						labelvals.put(label, arg1);
+					} else {
+						labelvals.put(label, arg1+arg2);
+					}
+				} else if (op1.equalsIgnoreCase("@next")) {
+					if (arg1 == null || arg2 == null) {
+						err = true;
+						errs = Message.ERR_MISSING_ARG;
+					} else {
+						address = Integer.parseInt(arg1+arg2,16);
+					}
 				} else {
-					address = Integer.parseInt(arg1+arg2);
-					SystemHandler.getExecuter().setStartAddress(address);
-				}
-			} else if (op1.equalsIgnoreCase("@equ")) {
-				if (label == null) {
 					err = true;
-					errs = Message.ERR_MISSING_LABEL;
-				} else if (arg1 == null) {
-					err = true;
-					errs = Message.ERR_MISSING_ARG;
-				} else if (arg2 == null) {
-					labelvals.put(label, arg1);
-				} else {
-					labelvals.put(label, arg1+arg2);
+					errs = Message.ERR_DIRECTIVE_NOT_FOUND;
 				}
-			} else if (op1.equalsIgnoreCase("@next")) {
-				if (arg1 == null || arg2 == null) {
-					err = true;
-					errs = Message.ERR_MISSING_ARG;
-				} else {
-					address = Integer.parseInt(arg1+arg2);
-				}
-			} else {
-				err = true;
-				errs = Message.ERR_DIRECTIVE_NOT_FOUND;
 			}
 		}
 		@Override

@@ -204,7 +204,7 @@ abstract class Operation {
 				int val2 = 1;
 				int newval = val1 - val2;
 				Register r = SystemHandler.getRegister();
-				r.setRegWithFlags(Address.REG_A, (byte) newval);
+				r.setRegWithFlags(part1, (byte) newval);
 				
 				String s = ByteUtil.toBinaryString(val1);
 				val1 = Integer.parseInt(s.substring(4));

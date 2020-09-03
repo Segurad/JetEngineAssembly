@@ -3,7 +3,7 @@ package jetengine.sys;
 import java.util.ArrayList;
 import java.util.List;
 
-import jetengine.sys.frontcon.MemListener;
+import jetengine.sys.event.MemListener;
 
 public final class Memory {
 

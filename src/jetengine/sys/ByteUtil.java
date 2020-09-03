@@ -15,7 +15,7 @@ public final class ByteUtil {
 	}
 	
 	public static byte bitwiseXOP(byte bytee, byte mask) {
-		return (byte) (bytee | mask);
+		return (byte) (bytee ^ mask);
 	}
 	
 	public static byte shiftLeft(byte bytee, int times) {
@@ -76,14 +76,14 @@ public final class ByteUtil {
 
 	public static byte highByte(int val) {
 		String s = ByteUtil.toHex(val, 4);
-		if (s.length() >=4) val = Integer.parseInt(s.substring(s.length()-4, s.length() -2));
+		if (s.length() >=4) val = Integer.parseInt(s.substring(s.length()-4, s.length() -2), 16);
 		else val = 0;
 		return (byte) val;
 	}
 
 	public static byte lowByte(int val) {
 		String s = ByteUtil.toHex(val, 4);
-		if (s.length() >=2) val = Integer.parseInt(s.substring(s.length()-2, s.length()));
+		if (s.length() >=2) val = Integer.parseInt(s.substring(s.length()-2, s.length()), 16);
 		else val = 0;
 		return (byte) val;
 	}

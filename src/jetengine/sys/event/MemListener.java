@@ -1,4 +1,4 @@
-package jetengine.sys.frontcon;
+package jetengine.sys.event;
 
 public interface MemListener {
 

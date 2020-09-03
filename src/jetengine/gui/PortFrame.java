@@ -20,7 +20,7 @@ import jetengine.sys.SystemHandler;
 final class PortFrame extends AbstractGUIComponent {
 
 	private PortPanel[] panels = new PortPanel[5];
-	private JScrollPane scrollPane;
+	private final JScrollPane scrollPane;
 	
 	public PortFrame() {
 		super("Ports");
@@ -64,7 +64,7 @@ final class PortFrame extends AbstractGUIComponent {
 					.addGap(1)
 					.addComponent(btnNew)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		

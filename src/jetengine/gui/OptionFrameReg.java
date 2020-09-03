@@ -26,7 +26,7 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-public class OptionFrameReg extends JFrame {
+final class OptionFrameReg extends JFrame {
 	
 	public OptionFrameReg() {
 		super("Register Manager");

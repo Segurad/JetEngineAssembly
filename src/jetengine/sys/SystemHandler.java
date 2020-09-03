@@ -2,9 +2,9 @@ package jetengine.sys;
 
 import java.util.ArrayList;
 
-import jetengine.sys.frontcon.ConsolListener;
-import jetengine.sys.frontcon.Editor;
-import jetengine.sys.frontcon.ProblemListener;
+import jetengine.sys.event.ConsolListener;
+import jetengine.sys.event.Editor;
+import jetengine.sys.event.ProblemListener;
 
 public class SystemHandler {
 

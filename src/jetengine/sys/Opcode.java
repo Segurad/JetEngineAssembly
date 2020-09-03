@@ -33,7 +33,7 @@ enum Opcode {
 	ANA_H(Address.REG_H, null, Operation.ANA, 1, "A4", 4),
 	ANA_L(Address.REG_L, null, Operation.ANA, 1, "A5", 4),
 	ANA_M(Address.REG_M, null, Operation.ANA, 1, "A6", 7),
-	ANI(null, null, Operation.ADD, 2, "E6", 7),
+	ANI(null, null, Operation.ANA, 2, "E6", 7),
 
 	CALL(null, null, Operation.CALL, 3, "CD", 18),
 	CC(Address.FLAG_CY, null, Operation.CALL_FLAG_1, 3, "DC", 9),

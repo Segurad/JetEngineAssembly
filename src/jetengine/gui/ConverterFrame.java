@@ -13,15 +13,15 @@ import jetengine.sys.ByteUtil;
 
 import javax.swing.SwingConstants;
 
-public class ConverterFrame extends AbstractGUIComponent {
+final class ConverterFrame extends AbstractGUIComponent {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField tfHex;
-	private JTextField tfDec;
-	private JTextField tfBin;
+	private final JTextField tfHex;
+	private final JTextField tfDec;
+	private final JTextField tfBin;
 
 	public ConverterFrame() {
 		super("Converter");
@@ -72,7 +72,7 @@ public class ConverterFrame extends AbstractGUIComponent {
 			public void actionPerformed(ActionEvent e) {
 				int i = 0;
 				try {
-					i = Integer.parseInt(tfBin.getText());
+					i = Integer.parseInt(tfDec.getText());
 				} catch (NumberFormatException e2) {
 					i = 0;
 					tfDec.setText(""+0);

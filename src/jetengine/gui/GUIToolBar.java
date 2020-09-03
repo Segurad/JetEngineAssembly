@@ -16,7 +16,7 @@ import javax.swing.border.Border;
 
 final class GUIToolBar extends JToolBar {
 	
-	private AbstractGUIComponent master;
+	private final AbstractGUIComponent master;
 	
 	public GUIToolBar() {
 		this(null);

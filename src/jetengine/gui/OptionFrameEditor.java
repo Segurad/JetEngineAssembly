@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSpinner;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,7 @@ import jetengine.sys.SystemHandler;
 
 import javax.swing.JButton;
 
-public class OptionFrameEditor extends JFrame {
+final class OptionFrameEditor extends JFrame {
 
 	/**
 	 * 
@@ -36,11 +37,11 @@ public class OptionFrameEditor extends JFrame {
 		lblFont.setForeground(ColorSet.boxTextColor);
 		
 		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setMaximumRowCount(32);
 		comboBox.setBorder(null);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {
-			"Consolas",
-			"Arial"
-		}));
+		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		comboBox.setModel(new DefaultComboBoxModel(fonts));
+		comboBox.setSelectedIndex(Config.editorFont);
 		
 		JLabel lblSize = new JLabel("Size");
 		lblSize.setForeground(ColorSet.boxTextColor);
@@ -57,9 +58,10 @@ public class OptionFrameEditor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String font = (String) comboBox.getModel().getSelectedItem();
 				int size = (int) spinner.getValue();
-				Config.editorFont = font;
+				Config.editorFontName = font;
+				Config.editorFont = comboBox.getSelectedIndex();
 				Config.editorFontSize = size;
-				SystemHandler.getEditors().forEach(ed -> ed.updateFont(font, size));
+				SystemHandler.getEditors().forEach(ed -> ed.updateFont());
 				OptionFrameEditor.this.dispose();
 			}
 		});

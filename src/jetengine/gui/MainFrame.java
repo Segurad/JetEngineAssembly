@@ -9,7 +9,8 @@ import jetengine.sys.ByteUtil;
 import jetengine.sys.Config;
 import jetengine.sys.Message;
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.Editor;
+import jetengine.sys.event.Editor;
+import jetengine.sys.event.ExeListener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -37,13 +38,15 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JCheckBox;
 
-public final class MainFrame extends JFrame {
+public final class MainFrame extends JFrame implements ExeListener {
 	
-	private JTabbedPane tp1, tp2, tp3, tp4;
+	private final JTabbedPane tp1, tp2, tp3, tp4;
 	private static MainFrame instance;
+	private JButton btnExeAll, btnExeLine, btnExeStop;
 	
 	public MainFrame() {
 		instance = this;
+		SystemHandler.getExecuter().addListener(this);
 		setTitle(Message.JETENGINE+Config.verison);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -129,7 +132,9 @@ public final class MainFrame extends JFrame {
 		
 		p1.setLeftComponent(panel1);
 		p1.setDividerLocation(300);
-		new EditorFrame(null).attachDefault();
+		EditorFrame editor = new EditorFrame(null);
+		editor.attachDefault();
+		SystemHandler.selectEditor(editor);
 		new PortFrame().attachDefault();
 		new RegFrame().attachDefault();
 		new MemFrame().attachDefault();
@@ -190,7 +195,7 @@ public final class MainFrame extends JFrame {
 			
 			JMenuItem mntmSave = new JMenuItem("Save");
 			mnFile.add(mntmSave);
-			mntmOpen.addActionListener(new ActionListener() {
+			mntmSave.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					Editor ed = SystemHandler.getSelectedEditor();
@@ -326,11 +331,26 @@ public final class MainFrame extends JFrame {
 		JMenu mnHelp = new JMenu("Help");
 		bar.add(mnHelp);
 		
-		JMenuItem mntmAboud = new JMenuItem("Aboud");
-		mnHelp.add(mntmAboud);
+		JMenuItem mntmJetEngine = new JMenuItem("JetEngine");
+		mnHelp.add(mntmJetEngine);
+		mntmJetEngine.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JetEengineHelp().setVisible(true);
+			}
+		});
 		
 		JMenuItem menuItem = new JMenuItem("8085");
 		mnHelp.add(menuItem);
+		
+		JMenuItem mntmAboud = new JMenuItem("Aboud");
+		mnHelp.add(mntmAboud);
+		mntmAboud.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JetEngineAboud().setVisible(true);
+			}
+		});
 	}
 	
 	private void initToolBar() {
@@ -480,14 +500,15 @@ public final class MainFrame extends JFrame {
 				}
 			});
 			
-			JButton btnExe = new JButton();
-			btnExe.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_btn.png")));
-			btnExe.setOpaque(false);
-			btnExe.setBorder(border);
-			btnExe.setToolTipText("Execute");
-			btnExe.setFocusable(false);
-			toolBar3.add(btnExe);
-			btnExe.addActionListener(new ActionListener() {
+			btnExeAll = new JButton();
+			btnExeAll.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_btn_disable.png")));
+			btnExeAll.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_btn.png")));
+			btnExeAll.setOpaque(false);
+			btnExeAll.setBorder(border);
+			btnExeAll.setToolTipText("Execute");
+			btnExeAll.setFocusable(false);
+			toolBar3.add(btnExeAll);
+			btnExeAll.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					int adr = 0;
@@ -503,7 +524,8 @@ public final class MainFrame extends JFrame {
 				}
 			});
 			
-			JButton btnExeLine = new JButton();
+			btnExeLine = new JButton();
+			btnExeLine.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_line_btn_disable.png")));
 			btnExeLine.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_line_btn.png")));
 			btnExeLine.setOpaque(false);
 			btnExeLine.setBorder(border);
@@ -526,12 +548,14 @@ public final class MainFrame extends JFrame {
 				}
 			});
 			
-			JButton btnExeStop = new JButton();
+			btnExeStop = new JButton();
+			btnExeStop.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_stop_btn_disable.png")));
 			btnExeStop.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_stop_btn.png")));
 			btnExeStop.setOpaque(false);
 			btnExeStop.setBorder(border);
 			btnExeStop.setToolTipText("Execute stop");
 			btnExeStop.setFocusable(false);
+			btnExeStop.setEnabled(false);
 			toolBar3.add(btnExeStop);
 			btnExeStop.addActionListener(new ActionListener() {
 				@Override
@@ -595,5 +619,22 @@ public final class MainFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void updateState(State state) {
+		if (state == State.EXE_ALL) {
+			btnExeAll.setEnabled(false);
+			btnExeLine.setEnabled(false);
+			btnExeStop.setEnabled(true);
+		} else if (state == State.EXE_LINE) {
+			btnExeAll.setEnabled(false);
+			btnExeLine.setEnabled(true);
+			btnExeStop.setEnabled(true);
+		} else {
+			btnExeAll.setEnabled(true);
+			btnExeLine.setEnabled(true);
+			btnExeStop.setEnabled(false);
+		}
+	}
 
 }

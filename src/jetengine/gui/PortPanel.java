@@ -15,7 +15,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import jetengine.sys.ByteUtil;
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.PortListener;
+import jetengine.sys.event.PortListener;
+
 import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -25,9 +26,9 @@ import java.awt.Font;
 final class PortPanel extends JPanel implements PortListener {
 	
 	private byte port;
-	private JToggleButton p0,p1,p2,p3,p4,p5,p6,p7;
-	private JTextField tfTitle;
-	private JLabel lblValue;
+	private final JToggleButton p0,p1,p2,p3,p4,p5,p6,p7;
+	private final JTextField tfTitle;
+	private final JLabel lblValue;
 	
 	public PortPanel() {
 		this(null, "00");

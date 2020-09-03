@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.InterruptListener;
+import jetengine.sys.event.InterruptListener;
+
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -20,7 +21,7 @@ final class InterruptFrame extends AbstractGUIComponent implements InterruptList
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static JLabel lblIEFFVal;
+	private final JLabel lblIEFFVal;
 
 	public InterruptFrame() {
 		super("Interrupts");

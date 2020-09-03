@@ -17,7 +17,7 @@ import jetengine.sys.SystemHandler;
 
 import javax.swing.JButton;
 
-public class OptionFrameClock extends JFrame {
+final class OptionFrameClock extends JFrame {
 
 	/**
 	 * 

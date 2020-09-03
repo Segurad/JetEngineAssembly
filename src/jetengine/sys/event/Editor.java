@@ -1,4 +1,4 @@
-package jetengine.sys.frontcon;
+package jetengine.sys.event;
 
 import jetengine.sys.StyleConfig;
 
@@ -18,7 +18,7 @@ public interface Editor {
 	public void compile();
 	public int getID();
 	public void setExeColor(int offset, int length, int state);
-	public void updateFont(String font, int size);
+	public void updateFont();
 	public boolean isSaved();
 	public void saveRequest();
 }

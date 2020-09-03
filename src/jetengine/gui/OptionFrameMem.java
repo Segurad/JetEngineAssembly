@@ -24,15 +24,15 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Dimension;
 
-public class OptionFrameMem extends JFrame {
+final class OptionFrameMem extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField tfStart;
-	private JTextField tfEnd;
-	private JTextField tfSet;
+	private final JTextField tfStart;
+	private final JTextField tfEnd;
+	private final JTextField tfSet;
 	private int start = 0, end = 16;
 	
 	public OptionFrameMem() {

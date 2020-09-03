@@ -6,7 +6,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
@@ -32,18 +31,19 @@ import jetengine.sys.Message;
 import jetengine.sys.StyleConfig;
 import jetengine.sys.SynAnalyser;
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.Editor;
+import jetengine.sys.event.Editor;
 
 final class EditorFrame extends AbstractGUIComponent implements Editor {
 
-	private JTextPane editor;
+	private final JTextPane editor;
+	private final TextLineNumber numberBar;
 	private StyledDocument doc;
 	private MutableAttributeSet[] formid;
-	private SynAnalyser san;
-	private ArrayList<String> undo = new ArrayList<String>(), redo = new ArrayList<String>();
-	private boolean selected = false, saved = false;
+	private final SynAnalyser san;
+	private final ArrayList<String> undo = new ArrayList<>(), redo = new ArrayList<>();
+	private boolean selected, saved;
 	private File file;
-	private int id;
+	private final int id;
     
 	
 	public EditorFrame(File file) {
@@ -57,6 +57,7 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 			}
 		}
 		saved = file == null ? false : true;
+		selected = false;
 		undo.add("");
 		san = new SynAnalyser(SystemHandler.getMemory(), this, id);
 		setBackground(ColorSet.boxOutColor);
@@ -81,7 +82,6 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 		
 		editor = new JTextPane();
 		editor.setText("");
-		editor.setFont(new Font(Config.editorFont, Font.PLAIN, Config.editorFontSize));
 		editor.setBackground(ColorSet.boxInColor);
 		editor.setForeground(ColorSet.editorTextDefault);
 		editor.setCaretColor(ColorSet.caretColor);
@@ -106,9 +106,10 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 		scrollPane.setViewportView(editor);
 		
 		//JPanel panel = new JPanel();
-		JPanel panel = new TextLineNumber(editor);
-		scrollPane.setRowHeaderView(panel);
+		numberBar = new TextLineNumber(editor);
+		scrollPane.setRowHeaderView(numberBar);
 		this.setLayout(groupLayout);
+		updateFont();
 		this.file = file;
 		if (file != null) {
 			open();
@@ -386,8 +387,11 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 	}
 
 	@Override
-	public void updateFont(String font, int size) {
-		editor.setFont(new Font(font, Font.PLAIN, size));
+	public void updateFont() {
+		Font font = new Font(Config.editorFontName, Font.PLAIN, Config.editorFontSize);
+		editor.setFont(font);
+		numberBar.setFont(font);
+		numberBar.setUpdateFont(true);
 	}
 
 	@Override

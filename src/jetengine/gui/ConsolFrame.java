@@ -1,7 +1,8 @@
 package jetengine.gui;
 
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.ConsolListener;
+import jetengine.sys.event.ConsolListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextPane;
@@ -12,7 +13,7 @@ import java.awt.Font;
 final class ConsolFrame extends AbstractGUIComponent implements ConsolListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextPane textPane;
+	private final JTextPane textPane;
 	
 	public ConsolFrame() {
 		super("Console");

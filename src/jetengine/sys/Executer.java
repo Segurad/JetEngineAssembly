@@ -1,7 +1,11 @@
 package jetengine.sys;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import jetengine.sys.event.ExeListener;
+import jetengine.sys.event.ExeListener.State;
 
 public class Executer {
 
@@ -11,6 +15,7 @@ public class Executer {
 	private int clock, compadr = 0;
 	private int[] oldmask;
 	private boolean run;
+	private ArrayList<ExeListener> listeners = new ArrayList<ExeListener>();
 	
 	public void start(int address) {
 		System.out.println("try start executer");
@@ -22,17 +27,19 @@ public class Executer {
 		r.setPC(address);
 		t = new Timer();
 		run = true;
+		listeners.forEach(l -> l.updateState(State.EXE_ALL));
 		run();
 	}
 	
 	public void startSignleLine(int address) {
-		if (run) {
+		if (run && t == null) {
 			execute();
 		} else {
 			r = SystemHandler.getRegister();
 			m = SystemHandler.getMemory();
 			run = true;
 			r.setPC(address);
+			listeners.forEach(l -> l.updateState(State.EXE_LINE));
 			execute();
 		}
 	}
@@ -163,6 +170,10 @@ public class Executer {
 	public void stop() {
 		if (!run) return;
 		run = false;
+		if (oldmask != null) {
+			SystemHandler.setEditorExeColor(oldmask, StyleConfig.EXE_FALSE);
+		}
+		listeners.forEach(l -> l.updateState(State.STOP));
 		if (t == null) return;
 		t.cancel();
 		t = null;
@@ -188,6 +199,14 @@ public class Executer {
 	
 	public void setStartAddress(int address) {
 		this.compadr = address;
+	}
+
+	public void addListener(ExeListener listener) {
+		if (!listeners.contains(listener)) listeners.add(listener);
+	}
+	
+	public void removeListener(ExeListener listener) {
+		listeners.remove(listener);
 	}
 
 }

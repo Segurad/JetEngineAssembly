@@ -4,7 +4,8 @@ import jetengine.sys.ByteUtil;
 import jetengine.sys.Memory;
 import jetengine.sys.Message;
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.MemListener;
+import jetengine.sys.event.MemListener;
+
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,9 +28,9 @@ import javax.swing.JButton;
 final class MemFrame extends AbstractGUIComponent implements MemListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTable table;
-	private JTextField txtStart;
-	private JTextField txtEnd;
+	private final JTable table;
+	private final JTextField txtStart;
+	private final JTextField txtEnd;
 	private int start = 0, end = 16;
 	
 	public MemFrame() {

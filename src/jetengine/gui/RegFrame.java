@@ -3,7 +3,8 @@ package jetengine.gui;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Register;
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.RegListener;
+import jetengine.sys.event.RegListener;
+
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;

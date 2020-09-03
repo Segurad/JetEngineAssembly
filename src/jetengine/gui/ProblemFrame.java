@@ -13,13 +13,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import jetengine.sys.SystemHandler;
-import jetengine.sys.frontcon.ProblemListener;
+import jetengine.sys.event.ProblemListener;
 
 final class ProblemFrame extends AbstractGUIComponent implements ProblemListener {
 	
 
 	private static final long serialVersionUID = 1L;
-	private JTable table;
+	private final JTable table;
 	
 	public ProblemFrame() {
 		super("Problems");
