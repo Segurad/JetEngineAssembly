@@ -4,7 +4,7 @@ import java.awt.GraphicsEnvironment;
 
 public class Config {
 	
-	public static final String verison = "v0.0.12a";
+	public static final String verison = "v0.0.14";
 	public static int editorFont;
 	public static int editorFontSize;
 	public static String editorFontName;

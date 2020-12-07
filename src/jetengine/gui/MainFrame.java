@@ -107,11 +107,13 @@ public final class MainFrame extends JFrame implements ExeListener {
 		panel4.setLayout(gl_panel4);
 		
 		JSplitPane p1 = new JSplitPane();
+		p1.setOneTouchExpandable(true);
 		p1.setBorder(null);
 		p1.setDividerSize(10);
 		getContentPane().add(p1, BorderLayout.CENTER);
 		
 		JSplitPane p2 = new JSplitPane();
+		p2.setOneTouchExpandable(true);
 		p2.setBorder(null);
 		p2.setDividerSize(10);
 		p2.setDividerLocation(500);
@@ -119,6 +121,7 @@ public final class MainFrame extends JFrame implements ExeListener {
 		p1.setRightComponent(p2);
 		
 		JSplitPane p3 = new JSplitPane();
+		p3.setOneTouchExpandable(true);
 		p3.setBorder(null);
 		p3.setDividerSize(10);
 		p2.setLeftComponent(p3);
@@ -342,15 +345,6 @@ public final class MainFrame extends JFrame implements ExeListener {
 		
 		JMenuItem menuItem = new JMenuItem("8085");
 		mnHelp.add(menuItem);
-		
-		JMenuItem mntmAboud = new JMenuItem("Aboud");
-		mnHelp.add(mntmAboud);
-		mntmAboud.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new JetEngineAboud().setVisible(true);
-			}
-		});
 	}
 	
 	private void initToolBar() {

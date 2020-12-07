@@ -58,5 +58,9 @@ public final class Memory {
 	public int[] getEditorMask(int key) {
 		return editormask[key];
 	}
+
+	public Byte[] getMemory() {
+		return mem;
+	}
 	
 }

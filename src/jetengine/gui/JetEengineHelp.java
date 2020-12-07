@@ -3,9 +3,8 @@ package jetengine.gui;
 import javax.swing.JFrame;
 
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.swing.AbstractListModel;
@@ -90,11 +89,11 @@ final class JetEengineHelp extends JFrame {
 		textPane.setForeground(ColorSet.boxTextColor);
 		textPane.setEditable(false);
 		try {
-			File f = new File(getClass().getResource("/jetengine/html/overview.html").getFile());
-			textPane.read(new InputStreamReader(new FileInputStream(f), "UTF-8"),f);
+			InputStream f = getClass().getResourceAsStream("/jetengine/html/overview.html");
+			textPane.read(new InputStreamReader(f, "UTF-8"),f);
 			textPane.setText(textPane.getText()
 					.replace("color: #000000", "color: #" + ByteUtil.toHex(ColorSet.boxTextColor.getRGB(), 6).substring(2))
-					.replace("%img%", getClass().getResource("/jetengine/html/img/").toString()));
+					.replace("%img%", getClass().getResource("/jetengine/html/img").toString()));
 			textPane.setCaretPosition(0);
 		} catch (IOException e) {
 			e.printStackTrace();

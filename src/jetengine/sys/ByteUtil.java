@@ -67,7 +67,7 @@ public final class ByteUtil {
 	}
 	
 	public static int toInt(byte bytee1, byte bytee2) {
-		return Integer.parseInt(ByteUtil.toHex(bytee1, 2) + ByteUtil.toHex(bytee2, 2), 16);
+		return bytee1 << 8 + bytee2;
 	}
 	
 	public static int toUnsignedByte(byte bytee) {
@@ -75,16 +75,10 @@ public final class ByteUtil {
 	}
 
 	public static byte highByte(int val) {
-		String s = ByteUtil.toHex(val, 4);
-		if (s.length() >=4) val = Integer.parseInt(s.substring(s.length()-4, s.length() -2), 16);
-		else val = 0;
-		return (byte) val;
+		return (byte) (val >>> 8);
 	}
 
 	public static byte lowByte(int val) {
-		String s = ByteUtil.toHex(val, 4);
-		if (s.length() >=2) val = Integer.parseInt(s.substring(s.length()-2, s.length()), 16);
-		else val = 0;
 		return (byte) val;
 	}
 	

@@ -8,20 +8,28 @@ import java.util.TimerTask;
 
 import jetengine.sys.event.Editor;
 
+/**
+ * 
+ * @author Segurad
+ *
+ */
 public class SynAnalyser {
 
-	private Memory mem;
-	private Editor editor;
+	private final Memory mem;
+	private final Editor editor;
 	private Timer timer;
-	private HashMap<String, String> labelvals;
-	private HashMap<Integer, CodePart> missingvars;
-	private ArrayList<String> problems;
+	private final HashMap<String, String> labelvals;
+	private final HashMap<Integer, CodePart> missingvars;
+	private final ArrayList<String> problems;
 	private int address, offset, id;
 	
 	public SynAnalyser(Memory mem, Editor editor, int id) {
 		this.mem = mem;
 		this.editor = editor;
 		this.id = id;
+		labelvals = new HashMap<String, String>();
+		missingvars = new HashMap<Integer, CodePart>();
+		problems = new ArrayList<String>();
 	}
 	
 	public void notifyAnalyser() {
@@ -38,8 +46,17 @@ public class SynAnalyser {
 		timer.schedule(task, 750);
 	}
 	/**
+	 * SynAnlayser
+	 * --------------------
+	 * Splitting comments from code ->
+	 * Organize remaining text in:
+	 * - labels
+	 * - opcode parts
+	 * - values
+	 * Assemble Code
+	 * Color Code in Editor
 	 * 
-	 * @param text the text that should be analysed
+	 * @param text the text that should be analyzed
 	 * @param back weather or not the editor should get a text backup
 	 */
 	
@@ -53,9 +70,6 @@ public class SynAnalyser {
 		System.out.println("--------------------------");
 		address = 0;
 		offset = 0;
-		labelvals = new HashMap<String, String>();
-		missingvars = new HashMap<Integer, CodePart>();
-		problems = new ArrayList<String>();
 		if (back) editor.backup();
 		ArrayList<CodePart> codeParts = new ArrayList<CodePart>();
 		boolean marker = false;
@@ -222,9 +236,9 @@ public class SynAnalyser {
 			part.paint();
 		}
 		SystemHandler.sendProblems(problems);
-		labelvals = null;
-		missingvars = null;
-		problems = null;
+		labelvals.clear();
+		missingvars.clear();
+		problems.clear();
 	}
 	
 	private interface CodePart {
@@ -252,7 +266,10 @@ public class SynAnalyser {
 			this.partsOrg = partsOrg;
 			this.line = line;
 			String test = "";
-			if (op1 != null) {
+			if (label != null && ByteUtil.validHex(label.substring(0, label.length()-1))) {
+				err = true;
+				errs = Message.ERR_HEX_LABEL;
+			} else if (op1 != null) {
 				if (!op1.startsWith("@")) {
 					test = test + op1;
 					if (op2 != null) test = test + "_" + op2;

@@ -161,7 +161,7 @@ public class Executer {
 	
 	private void errorOpcodeNull() {
 		stop();
-		SystemHandler.sendMessage(Message.EXE_OPCODE_NULL);
+		SystemHandler.sendMessage(Message.ERR_EXE_OPCODE_NULL);
 		if (oldmask != null) {
 			SystemHandler.setEditorExeColor(oldmask, StyleConfig.EXE_FALSE);
 		}

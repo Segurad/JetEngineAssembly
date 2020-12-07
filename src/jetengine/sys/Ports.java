@@ -38,4 +38,8 @@ public class Ports {
 	public void addListener(PortListener listener) {
 		listeners.add(listener);
 	}
+
+	public Byte[] getPorts() {
+		return mem;
+	}
 }

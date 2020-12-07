@@ -390,8 +390,8 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 	public void updateFont() {
 		Font font = new Font(Config.editorFontName, Font.PLAIN, Config.editorFontSize);
 		editor.setFont(font);
-		numberBar.setFont(font);
 		numberBar.setUpdateFont(true);
+		numberBar.setFont(font);
 	}
 
 	@Override
