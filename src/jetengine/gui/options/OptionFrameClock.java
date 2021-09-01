@@ -1,23 +1,24 @@
-package jetengine.gui;
+package jetengine.gui.options;
 
-import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSpinner;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.SpinnerNumberModel;
 
+import jetengine.gui.BaseFrame;
+import jetengine.gui.ColorSet;
 import jetengine.sys.SystemHandler;
 
 import javax.swing.JButton;
 
-final class OptionFrameClock extends JFrame {
+/**
+ * Frame to edit the clock frequency
+ * @author Segurad
+ */
+public final class OptionFrameClock extends BaseFrame {
 
 	/**
 	 * 
@@ -25,36 +26,27 @@ final class OptionFrameClock extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	public OptionFrameClock() {
-		getContentPane().setBackground(ColorSet.boxOutColor);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
-		
+		super("Clock");
 		JLabel lblClock = new JLabel("Clock");
 		lblClock.setForeground(ColorSet.boxTextColor);
 		
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(new Integer(SystemHandler.getClock()), new Integer(0), null, new Integer(1)));
+		spinner.setModel(new SpinnerNumberModel(SystemHandler.getClock(), 0, null, 1));
 		spinner.setBackground(ColorSet.boxInColor);
 		spinner.setForeground(ColorSet.boxTextColor);
 		
 		JButton btnApply = new JButton("Apply and Close");
 		btnApply.setBackground(ColorSet.boxButton);
-		btnApply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int clock = (int) spinner.getValue();
-				SystemHandler.setClock(clock);
-				OptionFrameClock.this.dispose();
-			}
+		btnApply.addActionListener((e) -> {
+			int clock = (int) spinner.getValue();
+			SystemHandler.setClock(clock);
+			OptionFrameClock.this.dispose();
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(ColorSet.boxButton);
-		btnCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				OptionFrameClock.this.dispose();
-			}
+		btnCancel.addActionListener((e) -> {
+			OptionFrameClock.this.dispose();
 		});
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());

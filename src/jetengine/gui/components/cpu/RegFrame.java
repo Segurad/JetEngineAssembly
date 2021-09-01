@@ -1,5 +1,10 @@
-package jetengine.gui;
+package jetengine.gui.components.cpu;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.GUIToolBar;
+import jetengine.gui.options.OptionFrameReg;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Register;
 import jetengine.sys.SystemHandler;
@@ -16,7 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import java.awt.Dimension;
 
-final class RegFrame extends AbstractGUIComponent implements RegListener{
+public final class RegFrame extends AbstractGUIComponent implements RegListener{
 
 	private JLabel a,b,c,d,e,h,l,s,z,ac,p,cy,sp,pc;
 	

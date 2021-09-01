@@ -1,4 +1,4 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
 import javax.swing.JTextPane;
 
@@ -18,14 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
 import jetengine.sys.Config;
 import jetengine.sys.Message;
 import jetengine.sys.StyleConfig;
@@ -33,7 +33,7 @@ import jetengine.sys.SynAnalyser;
 import jetengine.sys.SystemHandler;
 import jetengine.sys.event.Editor;
 
-final class EditorFrame extends AbstractGUIComponent implements Editor {
+public final class EditorFrame extends AbstractGUIComponent implements Editor {
 
 	private final JTextPane editor;
 	private final TextLineNumber numberBar;
@@ -97,11 +97,8 @@ final class EditorFrame extends AbstractGUIComponent implements Editor {
 			@Override
 			public void keyTyped(KeyEvent e) {}
 		});
-		editor.addCaretListener(new CaretListener() {
-			@Override
-			public void caretUpdate(CaretEvent e) {
-				SystemHandler.selectEditor(EditorFrame.this);
-			}
+		editor.addCaretListener((e) -> {
+			SystemHandler.selectEditor(EditorFrame.this);
 		});
 		scrollPane.setViewportView(editor);
 		

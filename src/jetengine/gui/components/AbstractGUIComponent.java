@@ -1,13 +1,13 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import jetengine.gui.BaseFrame;
 
 public abstract class AbstractGUIComponent extends JPanel {
 	
@@ -15,7 +15,7 @@ public abstract class AbstractGUIComponent extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane attached, old;
 	private String name, tname;
-	private JFrame window;
+	private BaseFrame window;
 	
 	public AbstractGUIComponent(String name) {
 		this.name = name;
@@ -45,11 +45,9 @@ public abstract class AbstractGUIComponent extends JPanel {
 		} else {
 			old = attached;
 			attached = null;
-			window = new JFrame(tname);
-			window.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
+			window = new BaseFrame(tname);
 			window.setContentPane(this);
 			window.setVisible(true);
-			window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			window.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					window = null;
@@ -107,7 +105,7 @@ public abstract class AbstractGUIComponent extends JPanel {
 		this.name = name;
 	}
 	
-	protected String getFrameName() {
+	public String getFrameName() {
 		return name;
 	}
 	

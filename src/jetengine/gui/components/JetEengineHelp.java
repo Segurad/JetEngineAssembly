@@ -1,4 +1,4 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
 import javax.swing.JFrame;
 
@@ -18,12 +18,15 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
+import jetengine.assets.Assets;
+import jetengine.gui.ColorSet;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Message;
 
 import javax.swing.JTextPane;
 
-final class JetEengineHelp extends JFrame {
+public final class JetEengineHelp extends JFrame {
 
 	/**
 	 * 
@@ -36,7 +39,7 @@ final class JetEengineHelp extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setBackground(ColorSet.boxOutColor);
 		setTitle(Message.JETENGINE+"Help");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(Assets.ICON_JETENGINE)));
 		StyleConstants.setBackground(textColor, ColorSet.boxInColor);
         StyleConstants.setForeground(textColor, ColorSet.boxTextColor);
 		

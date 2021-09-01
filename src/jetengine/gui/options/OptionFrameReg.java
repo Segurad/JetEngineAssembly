@@ -1,11 +1,6 @@
-package jetengine.gui;
-
-import javax.swing.JFrame;
+package jetengine.gui.options;
 
 import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -15,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import jetengine.gui.BaseFrame;
+import jetengine.gui.ColorSet;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Register;
 import jetengine.sys.SystemHandler;
@@ -26,13 +23,14 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-final class OptionFrameReg extends JFrame {
+/**
+ * Frame for editing the registers
+ * @author Segurad
+ */
+public final class OptionFrameReg extends BaseFrame {
 	
 	public OptionFrameReg() {
 		super("Register Manager");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		getContentPane().setBackground(ColorSet.boxInColor);
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Register", TitledBorder.LEADING, TitledBorder.TOP, null, ColorSet.boxTextColor));
 		panel.setBackground(ColorSet.boxOutColor);
@@ -43,63 +41,57 @@ final class OptionFrameReg extends JFrame {
 		
 		JButton btnApply = new JButton("Apply and Close");
 		btnApply.setBackground(ColorSet.boxButton);
-		btnApply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				Register r = SystemHandler.getRegister();
-				if (ByteUtil.validHex(a.getText())) {
-					r.setA((byte) Integer.parseInt(a.getText(), 16));
-				}
-				if (ByteUtil.validHex(b.getText())) {
-					r.setB((byte) Integer.parseInt(b.getText(), 16));
-				}
-				if (ByteUtil.validHex(c.getText())) {
-					r.setC((byte) Integer.parseInt(c.getText(), 16));
-				}
-				if (ByteUtil.validHex(d.getText())) {
-					r.setD((byte) Integer.parseInt(d.getText(), 16));
-				}
-				if (ByteUtil.validHex(e.getText())) {
-					r.setE((byte) Integer.parseInt(e.getText(), 16));
-				}
-				if (ByteUtil.validHex(h.getText())) {
-					r.setH((byte) Integer.parseInt(h.getText(), 16));
-				}
-				if (ByteUtil.validHex(l.getText())) {
-					r.setL((byte) Integer.parseInt(l.getText(), 16));
-				}
-				if (ByteUtil.validHex(sp.getText())) {
-					r.setStack(Integer.parseInt(sp.getText(), 16));
-				}
-				if (ByteUtil.validHex(pc.getText())) {
-					r.setPC(Integer.parseInt(pc.getText(), 16));
-				}
-				if (ByteUtil.validHex(s.getText())) {
-					r.setS((byte) Integer.parseInt(s.getText(), 16));
-				}
-				if (ByteUtil.validHex(z.getText())) {
-					r.setZ((byte) Integer.parseInt(z.getText(), 16));
-				}
-				if (ByteUtil.validHex(ac.getText())) {
-					r.setAc((byte) Integer.parseInt(ac.getText(), 16));
-				}
-				if (ByteUtil.validHex(p.getText())) {
-					r.setP((byte) Integer.parseInt(p.getText(), 16));
-				}
-				if (ByteUtil.validHex(cy.getText())) {
-					r.setCy((byte) Integer.parseInt(cy.getText(), 16));
-				}
-				OptionFrameReg.this.dispose();
+		btnApply.addActionListener((event) -> {
+			Register r = SystemHandler.getRegister();
+			if (ByteUtil.validHex(a.getText())) {
+				r.setA((byte) Integer.parseInt(a.getText(), 16));
 			}
+			if (ByteUtil.validHex(b.getText())) {
+				r.setB((byte) Integer.parseInt(b.getText(), 16));
+			}
+			if (ByteUtil.validHex(c.getText())) {
+				r.setC((byte) Integer.parseInt(c.getText(), 16));
+			}
+			if (ByteUtil.validHex(d.getText())) {
+				r.setD((byte) Integer.parseInt(d.getText(), 16));
+			}
+			if (ByteUtil.validHex(e.getText())) {
+				r.setE((byte) Integer.parseInt(e.getText(), 16));
+			}
+			if (ByteUtil.validHex(h.getText())) {
+				r.setH((byte) Integer.parseInt(h.getText(), 16));
+			}
+			if (ByteUtil.validHex(l.getText())) {
+				r.setL((byte) Integer.parseInt(l.getText(), 16));
+			}
+			if (ByteUtil.validHex(sp.getText())) {
+				r.setStack(Integer.parseInt(sp.getText(), 16));
+			}
+			if (ByteUtil.validHex(pc.getText())) {
+				r.setPC(Integer.parseInt(pc.getText(), 16));
+			}
+			if (ByteUtil.validHex(s.getText())) {
+				r.setS((byte) Integer.parseInt(s.getText(), 16));
+			}
+			if (ByteUtil.validHex(z.getText())) {
+				r.setZ((byte) Integer.parseInt(z.getText(), 16));
+			}
+			if (ByteUtil.validHex(ac.getText())) {
+				r.setAc((byte) Integer.parseInt(ac.getText(), 16));
+			}
+			if (ByteUtil.validHex(p.getText())) {
+				r.setP((byte) Integer.parseInt(p.getText(), 16));
+			}
+			if (ByteUtil.validHex(cy.getText())) {
+				r.setCy((byte) Integer.parseInt(cy.getText(), 16));
+			}
+			OptionFrameReg.this.dispose();
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(ColorSet.boxButton);
-		btnCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				OptionFrameReg.this.dispose();
-			}
+		btnCancel.addActionListener((e) -> {
+			OptionFrameReg.this.dispose();
 		});
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -139,30 +131,24 @@ final class OptionFrameReg extends JFrame {
 		
 		JButton btnFRandAll = new JButton("All random");
 		btnFRandAll.setBackground(ColorSet.boxButton);
-		btnFRandAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Random r = new Random();
-				s.setText("" + r.nextInt(2));
-				z.setText("" + r.nextInt(2));
-				ac.setText("" + r.nextInt(2));
-				p.setText("" + r.nextInt(2));
-				cy.setText("" + r.nextInt(2));
-			}
+		btnFRandAll.addActionListener((e) -> {
+			Random rand = new Random();
+			s.setText("" + rand.nextInt(2));
+			z.setText("" + rand.nextInt(2));
+			ac.setText("" + rand.nextInt(2));
+			p.setText("" + rand.nextInt(2));
+			cy.setText("" + rand.nextInt(2));
 		});
 		btnFRandAll.setFocusable(false);
 		
 		JButton btnFClearAll = new JButton("Clear");
 		btnFClearAll.setBackground(ColorSet.boxButton);
-		btnFClearAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				s.setText("0");
-				z.setText("0");
-				ac.setText("0");
-				p.setText("0");
-				cy.setText("0");
-			}
+		btnFClearAll.addActionListener((e) -> {
+			s.setText("0");
+			z.setText("0");
+			ac.setText("0");
+			p.setText("0");
+			cy.setText("0");
 		});
 		btnFClearAll.setFocusable(false);
 		
@@ -449,38 +435,32 @@ final class OptionFrameReg extends JFrame {
 		
 		JButton btnRRandAll = new JButton("All random");
 		btnRRandAll.setBackground(ColorSet.boxButton);
-		btnRRandAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				Random r = new Random();
-				a.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				b.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				c.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				d.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				e.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				h.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				l.setText(ByteUtil.toHex(r.nextInt(0xFF+1), 2));
-				pc.setText(ByteUtil.toHex(r.nextInt(0xFFFF+1), 4));
-				sp.setText(ByteUtil.toHex(r.nextInt(0xFFFF+1), 4));
-			}
+		btnRRandAll.addActionListener((event) -> {
+			Random rand = new Random();
+			a.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			b.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			c.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			d.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			e.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			h.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			l.setText(ByteUtil.toHex(rand.nextInt(0xFF+1), 2));
+			pc.setText(ByteUtil.toHex(rand.nextInt(0xFFFF+1), 4));
+			sp.setText(ByteUtil.toHex(rand.nextInt(0xFFFF+1), 4));
 		});
 		btnRRandAll.setFocusable(false);
 		
 		JButton btnRClearAll = new JButton("Clear");
 		btnRClearAll.setBackground(ColorSet.boxButton);
-		btnRClearAll.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				a.setText("00");
-				b.setText("00");
-				c.setText("00");
-				d.setText("00");
-				e.setText("00");
-				h.setText("00");
-				l.setText("00");
-				pc.setText("0000");
-				sp.setText("0000");
-			}
+		btnRClearAll.addActionListener((event) -> {
+			a.setText("00");
+			b.setText("00");
+			c.setText("00");
+			d.setText("00");
+			e.setText("00");
+			h.setText("00");
+			l.setText("00");
+			pc.setText("0000");
+			sp.setText("0000");
 		});
 		btnRClearAll.setFocusable(false);
 		
@@ -687,15 +667,12 @@ final class OptionFrameReg extends JFrame {
 		btn.setBorder(border);
         btn.setToolTipText("Clear");
         btn.setFocusable(false);
-		btn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String s = "0";
-				for (int i = 1; i < tf.getColumns(); i++) {
-					s += "0";
-				}
-				tf.setText(s);
+		btn.addActionListener((e) -> {
+			String s = "0";
+			for (int i = 1; i < tf.getColumns(); i++) {
+				s += "0";
 			}
+			tf.setText(s);
 		});
 		return btn;
 	}
@@ -708,21 +685,18 @@ final class OptionFrameReg extends JFrame {
 		btn.setBackground(ColorSet.boxButton);
 		btn.setBorder(border);
 		btn.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/random_btn.png")));
-		btn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String s;
-				if (tf.getColumns() == 1) {
-					s = "1";
-				} else {
-					s = "FF";
-					for (int i = 2; i < tf.getColumns(); i++) {
-						s += "F";
-					}
+		btn.addActionListener((e) -> {
+			String s;
+			if (tf.getColumns() == 1) {
+				s = "1";
+			} else {
+				s = "FF";
+				for (int i = 2; i < tf.getColumns(); i++) {
+					s += "F";
 				}
-				int i = new Random().nextInt(Integer.parseInt(s, 16)+1);
-				tf.setText(ByteUtil.toHex(i, tf.getColumns()));
 			}
+			int i = new Random().nextInt(Integer.parseInt(s, 16)+1);
+			tf.setText(ByteUtil.toHex(i, tf.getColumns()));
 		});
 		return btn;
 	}

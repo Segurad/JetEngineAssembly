@@ -1,5 +1,10 @@
-package jetengine.gui;
+package jetengine.gui.components.cpu;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.GUIToolBar;
+import jetengine.gui.options.OptionFrameMem;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Memory;
 import jetengine.sys.Message;
@@ -11,21 +16,16 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-final class MemFrame extends AbstractGUIComponent implements MemListener {
+public final class MemFrame extends AbstractGUIComponent implements MemListener {
 
 	private static final long serialVersionUID = 1L;
 	private final JTable table;
@@ -60,11 +60,8 @@ final class MemFrame extends AbstractGUIComponent implements MemListener {
 		txtStart.setFont(new Font("Consolas", Font.PLAIN, 14));
 		txtStart.setColumns(10);
 		txtStart.setBorder(null);
-		txtStart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		txtStart.addActionListener((e) -> {
 				updateALL();
-			}
 		});
 		txtStart.setCaretColor(ColorSet.caretColor);
 		
@@ -75,11 +72,8 @@ final class MemFrame extends AbstractGUIComponent implements MemListener {
 		txtEnd.setFont(new Font("Consolas", Font.PLAIN, 14));
 		txtEnd.setColumns(10);
 		txtEnd.setBorder(null);
-		txtEnd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateALL();
-			}
+		txtEnd.addActionListener((e) -> {
+			updateALL();
 		});
 		txtEnd.setCaretColor(ColorSet.caretColor);
 		
@@ -94,11 +88,8 @@ final class MemFrame extends AbstractGUIComponent implements MemListener {
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setBackground(ColorSet.boxButton);
 		btnUpdate.setFocusable(false);
-		btnUpdate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateALL();
-			}
+		btnUpdate.addActionListener((e) -> {
+			updateALL();
 		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -246,15 +237,12 @@ final class MemFrame extends AbstractGUIComponent implements MemListener {
 	}
 	
 	private void addListener(DefaultTableModel model) {
-		model.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				int row = table.getEditingRow();
-				if (row == -1) return;
-				String k = (String) model.getValueAt(row, 0);
-				String v = (String) model.getValueAt(row, 1);
-				SystemHandler.getMemory().set(Integer.parseInt(k, 16), (byte) Integer.parseInt(v, 16), false);
-			}
+		model.addTableModelListener((e) -> {
+			int row = table.getEditingRow();
+			if (row == -1) return;
+			String k = (String) model.getValueAt(row, 0);
+			String v = (String) model.getValueAt(row, 1);
+			SystemHandler.getMemory().set(Integer.parseInt(k, 16), (byte) Integer.parseInt(v, 16), false);
 		});
 	}
 	

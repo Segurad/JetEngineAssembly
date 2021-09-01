@@ -1,6 +1,5 @@
-package jetengine.gui;
+package jetengine.gui.components.cpu;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -11,8 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import jetengine.assets.Assets;
+import jetengine.gui.ColorSet;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.SystemHandler;
 import jetengine.sys.event.PortListener;
@@ -43,15 +45,12 @@ final class PortPanel extends JPanel implements PortListener {
 		setBorder(BorderFactory.createLineBorder(ColorSet.boxContentBorder, 2));
 		setPreferredSize(new Dimension(325, 75));
 		JButton btnX = new JButton();
-		btnX.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/close_btn.png")));
+		btnX.setIcon(new ImageIcon(PortPanel.class.getResource(Assets.ICON_CLOSE)));
 		btnX.setBackground(ColorSet.boxOutColor);
         btnX.setBorderPainted(false);
-		btnX.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (frame != null) frame.removePort(PortPanel.this);
-				SystemHandler.getPorts().removeListener(PortPanel.this);
-			}
+		btnX.addActionListener((e) -> {
+			if (frame != null) frame.removePort(PortPanel.this);
+			SystemHandler.getPorts().removeListener(PortPanel.this);
 		});
 		
 		
@@ -63,76 +62,73 @@ final class PortPanel extends JPanel implements PortListener {
 		textField.setCaretColor(ColorSet.caretColor);
 		textField.setBackground(ColorSet.boxInColor);
 		textField.setBorder(null);
-		textField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				checkText(textField);
-			}
+		textField.addActionListener((e) -> {
+			checkText(textField);
 		});
 		
+		final Icon PORT_ON = new ImageIcon(PortPanel.class.getResource(Assets.ICON_PORT_ENABLED));
+		final Icon PORT_OFF = new ImageIcon(PortPanel.class.getResource(Assets.ICON_PORT_DISABLED));
+		
 		p0 = new JToggleButton();
-		p0.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p0.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p0.setIcon(PORT_OFF);
+		p0.setSelectedIcon(PORT_ON);
 		p0.setContentAreaFilled(false);
         p0.setBorderPainted(false);
         
 		p1 = new JToggleButton();
-		p1.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p1.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p1.setIcon(PORT_OFF);
+		p1.setSelectedIcon(PORT_ON);
 		p1.setContentAreaFilled(false);
         p1.setBorderPainted(false);
         
 		p2 = new JToggleButton();
-		p2.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p2.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p2.setIcon(PORT_OFF);
+		p2.setSelectedIcon(PORT_ON);
 		p2.setContentAreaFilled(false);
         p2.setBorderPainted(false);
         
 		p3 = new JToggleButton();
-		p3.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p3.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p3.setIcon(PORT_OFF);
+		p3.setSelectedIcon(PORT_ON);
 		p3.setContentAreaFilled(false);
         p3.setBorderPainted(false);
         
 		p4 = new JToggleButton();
-		p4.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p4.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p4.setIcon(PORT_OFF);
+		p4.setSelectedIcon(PORT_ON);
 		p4.setContentAreaFilled(false);
         p4.setBorderPainted(false);
         
 		p5 = new JToggleButton();
-		p5.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p5.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p5.setIcon(PORT_OFF);
+		p5.setSelectedIcon(PORT_ON);
 		p5.setContentAreaFilled(false);
         p5.setBorderPainted(false);
         
 		p6 = new JToggleButton();
-		p6.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p6.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p6.setIcon(PORT_OFF);
+		p6.setSelectedIcon(PORT_ON);
 		p6.setContentAreaFilled(false);
         p6.setBorderPainted(false);
         
 		p7 = new JToggleButton();
-		p7.setIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_off.png")));
-		p7.setSelectedIcon(new ImageIcon(PortPanel.class.getResource("/jetengine/port_on.png")));
+		p7.setIcon(PORT_OFF);
+		p7.setSelectedIcon(PORT_ON);
 		p7.setContentAreaFilled(false);
         p7.setBorderPainted(false);
 		
-		ActionListener al = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String binstr = "";
-				binstr += p7.isSelected() ? '1' : '0'; 
-				binstr += p6.isSelected() ? '1' : '0'; 
-				binstr += p5.isSelected() ? '1' : '0'; 
-				binstr += p4.isSelected() ? '1' : '0'; 
-				binstr += p3.isSelected() ? '1' : '0'; 
-				binstr += p2.isSelected() ? '1' : '0'; 
-				binstr += p1.isSelected() ? '1' : '0'; 
-				binstr += p0.isSelected() ? '1' : '0';
-				SystemHandler.getPorts().set(port, (byte) Integer.parseInt(binstr, 2), true);
-				System.out.println(binstr);
-			}
+		ActionListener al = (e) -> {
+			String binstr = "";
+			binstr += p7.isSelected() ? '1' : '0'; 
+			binstr += p6.isSelected() ? '1' : '0'; 
+			binstr += p5.isSelected() ? '1' : '0'; 
+			binstr += p4.isSelected() ? '1' : '0'; 
+			binstr += p3.isSelected() ? '1' : '0'; 
+			binstr += p2.isSelected() ? '1' : '0'; 
+			binstr += p1.isSelected() ? '1' : '0'; 
+			binstr += p0.isSelected() ? '1' : '0';
+			SystemHandler.getPorts().set(port, (byte) Integer.parseInt(binstr, 2), true);
+			System.out.println(binstr);
 		};
 		p0.addActionListener(al);
 		p1.addActionListener(al);

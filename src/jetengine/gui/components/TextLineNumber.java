@@ -1,4 +1,4 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,6 +28,8 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.Utilities;
+
+import jetengine.gui.ColorSet;
 
 /**
  *  @author Rob Camick

@@ -1,21 +1,22 @@
-package jetengine.gui;
+package jetengine.gui.components.cpu;
 import javax.swing.JButton;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.GUIToolBar;
 import jetengine.sys.SystemHandler;
 import jetengine.sys.event.InterruptListener;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-final class InterruptFrame extends AbstractGUIComponent implements InterruptListener {
+public final class InterruptFrame extends AbstractGUIComponent implements InterruptListener {
 
 	/**
 	 * 
@@ -36,41 +37,29 @@ final class InterruptFrame extends AbstractGUIComponent implements InterruptList
 		JButton btnRST55 = new JButton("RST 5.5");
 		btnRST55.setFocusable(false);
 		btnRST55.setBackground(ColorSet.boxButton);
-		btnRST55.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SystemHandler.getRegister().setI5((byte) 1);
-			}
+		btnRST55.addActionListener((e) -> {
+			SystemHandler.getRegister().setI5((byte) 1);
 		});
 		
 		JButton btnRST65 = new JButton("RST 6.5");
 		btnRST65.setFocusable(false);
 		btnRST65.setBackground(ColorSet.boxButton);
-		btnRST65.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SystemHandler.getRegister().setI6((byte) 1);
-			}
+		btnRST65.addActionListener((e) -> {
+			SystemHandler.getRegister().setI6((byte) 1);
 		});
 		
 		JButton btnRST75 = new JButton("RST 7.5");
 		btnRST75.setFocusable(false);
 		btnRST75.setBackground(ColorSet.boxButton);
-		btnRST75.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SystemHandler.getRegister().setI7((byte) 1);
-			}
+		btnRST75.addActionListener((e) -> {
+			SystemHandler.getRegister().setI7((byte) 1);
 		});
 		
 		JButton btnTrap = new JButton("Trap");
 		btnTrap.setFocusable(false);
 		btnTrap.setBackground(ColorSet.boxButton);
-		btnTrap.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SystemHandler.setTRAP(true);
-			}
+		btnTrap.addActionListener((e) -> {
+			SystemHandler.setTRAP(true);
 		});
 		
 		GUIToolBar toolBar = new GUIToolBar(this);
@@ -84,11 +73,8 @@ final class InterruptFrame extends AbstractGUIComponent implements InterruptList
 		JButton btnINTR = new JButton("INTR");
 		btnINTR.setFocusable(false);
 		btnINTR.setBackground(ColorSet.boxButton);
-		btnINTR.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SystemHandler.setINTR((int) spinner.getValue());
-			}
+		btnINTR.addActionListener((e) -> {
+			SystemHandler.setINTR((int) spinner.getValue());
 		});
 		
 		GroupLayout groupLayout = new GroupLayout(this);

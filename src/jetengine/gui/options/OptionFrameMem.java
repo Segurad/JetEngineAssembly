@@ -1,11 +1,7 @@
-package jetengine.gui;
+package jetengine.gui.options;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
-import javax.swing.JFrame;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -14,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.Border;
 
+import jetengine.gui.BaseFrame;
+import jetengine.gui.ColorSet;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Memory;
 import jetengine.sys.SystemHandler;
@@ -24,7 +22,11 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Dimension;
 
-final class OptionFrameMem extends JFrame {
+/**
+ * Frame for handling and editing the memory
+ * @author Segurad
+ */
+public final class OptionFrameMem extends BaseFrame {
 
 	/**
 	 * 
@@ -37,10 +39,6 @@ final class OptionFrameMem extends JFrame {
 	
 	public OptionFrameMem() {
 		super("Memory Manager");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		getContentPane().setBackground(ColorSet.boxOutColor);
-		
 		JLabel lblStart = new JLabel("Start");
 		lblStart.setFont(new Font("Consolas", Font.BOLD, 14));
 		lblStart.setForeground(ColorSet.boxTextColor);
@@ -73,42 +71,15 @@ final class OptionFrameMem extends JFrame {
 		
 		JButton btnRand = new JButton("All random");
 		btnRand.setBackground(ColorSet.boxButton);
-		btnRand.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (!checkAddress()) return;
-				Memory m = SystemHandler.getMemory();
-				Random r = new Random();
-				for (int i = start; i < end+1; i++) {
-					m.set(i, (byte) r.nextInt(0xFF+1));
-				}
+		btnRand.addActionListener((e) -> {
+			if (!checkAddress()) return;
+			Memory m = SystemHandler.getMemory();
+			Random r = new Random();
+			for (int i = start; i < end+1; i++) {
+				m.set(i, (byte) r.nextInt(0xFF+1));
 			}
 		});
 		btnRand.setFocusable(false);
-		
-		JButton btnSet = new JButton("Fill");
-		btnSet.setBackground(ColorSet.boxButton);
-		btnSet.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!checkAddress()) return;
-				if (tfSet.getText().length() == 2) {
-					if (!ByteUtil.validHex(tfSet.getText())) {
-						tfSet.setText("08");
-						return;
-					}
-				} else {
-					tfSet.setText("08");
-					return;
-				}
-				Memory m = SystemHandler.getMemory();
-				byte val = (byte) Integer.parseInt(tfSet.getText(), 16);
-				for (int i = start; i < end+1; i++) {
-					m.set(i, val);
-				}
-			}
-		});
-		btnSet.setFocusable(false);
 		
 		tfSet = new JTextField("08");
 		tfSet.setPreferredSize(new Dimension(18, 23));
@@ -120,40 +91,52 @@ final class OptionFrameMem extends JFrame {
 		tfSet.setBorder(null);
 		tfSet.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
+		JButton btnSet = new JButton("Fill");
+		btnSet.setBackground(ColorSet.boxButton);
+		btnSet.addActionListener((e) -> {
+			if (!checkAddress()) return;
+			if (tfSet.getText().length() == 2) {
+				if (!ByteUtil.validHex(tfSet.getText())) {
+					tfSet.setText("08");
+					return;
+				}
+			} else {
+				tfSet.setText("08");
+				return;
+			}
+			Memory m = SystemHandler.getMemory();
+			byte val = (byte) Integer.parseInt(tfSet.getText(), 16);
+			for (int i = start; i < end+1; i++) {
+				m.set(i, val);
+			}
+		});
+		btnSet.setFocusable(false);
+		
 		JButton btnRandTF = new JButton();
 		btnRandTF.setToolTipText("Random");
 		btnRandTF.setBackground(ColorSet.boxButton);
 		btnRandTF.setBorder(border);
 		btnRandTF.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/random_btn.png")));
-		btnRandTF.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				tfSet.setText(ByteUtil.toHex(new Random().nextInt(0xFF+1), 2));
-			}
+		btnRandTF.addActionListener((e) -> {
+			tfSet.setText(ByteUtil.toHex(new Random().nextInt(0xFF+1), 2));
 		});
 		btnRandTF.setFocusable(false);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.setBackground(ColorSet.boxButton);
-		btnClear.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!checkAddress()) return;
-				Memory m = SystemHandler.getMemory();
-				for (int i = start; i < end+1; i++) {
-					m.set(i, (byte) 8);
-				}
+		btnClear.addActionListener((e) -> {
+			if (!checkAddress()) return;
+			Memory m = SystemHandler.getMemory();
+			for (int i = start; i < end+1; i++) {
+				m.set(i, (byte) 8);
 			}
 		});
 		btnClear.setFocusable(false);
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(ColorSet.boxButton);
-		btnCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				OptionFrameMem.this.dispose();
-			}
+		btnCancel.addActionListener((e) -> {
+			OptionFrameMem.this.dispose();
 		});
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());

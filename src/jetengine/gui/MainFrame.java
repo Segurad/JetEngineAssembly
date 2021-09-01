@@ -1,10 +1,24 @@
 package jetengine.gui;
 
-import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
+import jetengine.assets.Assets;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.ConsolFrame;
+import jetengine.gui.components.EditorFrame;
+import jetengine.gui.components.JetEengineHelp;
+import jetengine.gui.components.ProblemFrame;
+import jetengine.gui.components.cpu.InterruptFrame;
+import jetengine.gui.components.cpu.MemFrame;
+import jetengine.gui.components.cpu.PortFrame;
+import jetengine.gui.components.cpu.RegFrame;
+import jetengine.gui.components.util.ConverterFrame;
+import jetengine.gui.options.OptionFrameClock;
+import jetengine.gui.options.OptionFrameEditor;
+import jetengine.gui.options.OptionFrameMem;
+import jetengine.gui.options.OptionFrameReg;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Config;
 import jetengine.sys.Message;
@@ -14,9 +28,6 @@ import jetengine.sys.event.ExeListener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -38,17 +49,16 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JCheckBox;
 
-public final class MainFrame extends JFrame implements ExeListener {
+public final class MainFrame extends BaseFrame implements ExeListener {
 	
 	private final JTabbedPane tp1, tp2, tp3, tp4;
 	private static MainFrame instance;
 	private JButton btnExeAll, btnExeLine, btnExeStop;
 	
 	public MainFrame() {
+		super(Message.JETENGINE+Config.verison);
 		instance = this;
 		SystemHandler.getExecuter().addListener(this);
-		setTitle(Message.JETENGINE+Config.verison);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/jetengine/icon.png")));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -145,7 +155,7 @@ public final class MainFrame extends JFrame implements ExeListener {
 		new ConsolFrame().attachDefault();
 		new InterruptFrame().attachDefault();
 		new ConverterFrame().attachDefault();
-		pack();
+		setExtendedState(MAXIMIZED_BOTH);
 	}
 	
 	public void addComponentLeft(AbstractGUIComponent comp) {
@@ -164,7 +174,7 @@ public final class MainFrame extends JFrame implements ExeListener {
 		comp.attach(tp3);
 	}
 
-	static MainFrame getInstance() {
+	public static MainFrame getInstance() {
 		return instance;
 	}
 	
@@ -177,20 +187,14 @@ public final class MainFrame extends JFrame implements ExeListener {
 			
 			JMenuItem mntmNew = new JMenuItem("New");
 			mnFile.add(mntmNew);
-			mntmNew.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					new EditorFrame(null).attachDefault();
-				}
+			mntmNew.addActionListener((e) -> {
+				new EditorFrame(null).attachDefault();
 			});
 			
 			JMenuItem mntmOpen = new JMenuItem("Open File");
 			mnFile.add(mntmOpen);
-			mntmOpen.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					showOpen();
-				}
+			mntmOpen.addActionListener((e) -> {
+				showOpen();
 			});
 			
 			JSeparator separator_1 = new JSeparator();
@@ -198,22 +202,16 @@ public final class MainFrame extends JFrame implements ExeListener {
 			
 			JMenuItem mntmSave = new JMenuItem("Save");
 			mnFile.add(mntmSave);
-			mntmSave.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					Editor ed = SystemHandler.getSelectedEditor();
-					if (ed != null) ed.save();
-				}
+			mntmSave.addActionListener((e) -> {
+				Editor ed = SystemHandler.getSelectedEditor();
+				if (ed != null) ed.save();
 			});
 			
 			JMenuItem mntmSaveAs = new JMenuItem("Save As...");
 			mnFile.add(mntmSaveAs);
-			mntmSaveAs.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Editor ed = SystemHandler.getSelectedEditor();
-					if (ed != null) ed.saveAs();
-				}
+			mntmSaveAs.addActionListener((e) -> {
+				Editor ed = SystemHandler.getSelectedEditor();
+				if (ed != null) ed.saveAs();
 			});
 			
 			JSeparator separator = new JSeparator();
@@ -227,33 +225,24 @@ public final class MainFrame extends JFrame implements ExeListener {
 			bar.add(mnManage);
 			
 			JMenuItem mntmRegister = new JMenuItem("Register");
-			mntmRegister.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/reg_btn.png")));
+			mntmRegister.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_REGISTER)));
 			mnManage.add(mntmRegister);
-			mntmRegister.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					new OptionFrameReg().setVisible(true);
-				}
+			mntmRegister.addActionListener((e) -> {
+				new OptionFrameReg().setVisible(true);
 			});
 			
 			JMenuItem mntmMemory = new JMenuItem("Memory");
-			mntmMemory.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/mem_btn.png")));
+			mntmMemory.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_MEMORY)));
 			mnManage.add(mntmMemory);
-			mntmMemory.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					new OptionFrameMem().setVisible(true);
-				}
+			mntmMemory.addActionListener((e) -> {
+				new OptionFrameMem().setVisible(true);
 			});
 			
 			JMenuItem mntmClock = new JMenuItem("Clock Frequency");
-			mntmClock.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/clock_btn.png")));
+			mntmClock.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_CLOCK)));
 			mnManage.add(mntmClock);
-			mntmClock.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					new OptionFrameClock().setVisible(true);
-				}
+			mntmClock.addActionListener((e) -> {
+				new OptionFrameClock().setVisible(true);
 			});
 		}
 		{
@@ -265,68 +254,47 @@ public final class MainFrame extends JFrame implements ExeListener {
 				
 				JMenuItem mntmConsol = new JMenuItem("Consol");
 				mnShowView.add(mntmConsol);
-				mntmConsol.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new ConsolFrame().attachDefault();
-					}
+				mntmConsol.addActionListener((e) -> {
+					new ConsolFrame().attachDefault();
 				});
 				
 				JMenuItem mntmProblems = new JMenuItem("Problems");
 				mnShowView.add(mntmProblems);
-				mntmProblems.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new ProblemFrame().attachDefault();
-					}
+				mntmProblems.addActionListener((e) -> {
+					new ProblemFrame().attachDefault();
 				});
 				
 				JMenuItem mntmPorts = new JMenuItem("Ports");
 				mnShowView.add(mntmPorts);
-				mntmPorts.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new PortFrame().attachDefault();
-					}
+				mntmPorts.addActionListener((e) -> {
+					new PortFrame().attachDefault();
 				});
 				
 				JMenuItem mntmMemory = new JMenuItem("Memory");
-				mntmMemory.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/mem_btn.png")));
+				mntmMemory.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_MEMORY)));
 				mnShowView.add(mntmMemory);
-				mntmMemory.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new MemFrame().attachDefault();
-					}
+				mntmMemory.addActionListener((e) -> {
+					new MemFrame().attachDefault();
 				});
 				
 				JMenuItem mntmRegister = new JMenuItem("Register");
-				mntmRegister.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/reg_btn.png")));
+				mntmRegister.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_REGISTER)));
 				mnShowView.add(mntmRegister);
-				mntmRegister.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new RegFrame().attachDefault();
-					}
+				mntmRegister.addActionListener((e) -> {
+					new RegFrame().attachDefault();
 				});
 				
 				JMenuItem mntmConverter = new JMenuItem("Converter");
 				mnShowView.add(mntmConverter);
-				mntmConverter.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new ConverterFrame().attachDefault();
-					}
+				mntmConverter.addActionListener((e) -> {
+					new ConverterFrame().attachDefault();
 				});
 			}
 			{
 				JMenuItem mnEditor = new JMenuItem("Editor");
 				mnWindow.add(mnEditor);
-				mnEditor.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new OptionFrameEditor().setVisible(true);
-					}
+				mnEditor.addActionListener((e) -> {
+					new OptionFrameEditor().setVisible(true);
 				});
 			}
 		}
@@ -336,11 +304,8 @@ public final class MainFrame extends JFrame implements ExeListener {
 		
 		JMenuItem mntmJetEngine = new JMenuItem("JetEngine");
 		mnHelp.add(mntmJetEngine);
-		mntmJetEngine.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new JetEengineHelp().setVisible(true);
-			}
+		mntmJetEngine.addActionListener((e) -> {
+			new JetEengineHelp().setVisible(true);
 		});
 		
 		JMenuItem menuItem = new JMenuItem("8085");
@@ -366,32 +331,26 @@ public final class MainFrame extends JFrame implements ExeListener {
 			toolBar1.setBackground(ColorSet.boxOutColor);
 			
 			JButton btnNew = new JButton();
-			btnNew.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/new_btn.png")));
+			btnNew.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_NEW_FILE)));
 			btnNew.setOpaque(false);
 			btnNew.setBorder(border);
 			btnNew.setToolTipText("New");
 			btnNew.setFocusable(false);
 			toolBar1.add(btnNew);
-			btnNew.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
+			btnNew.addActionListener((e) -> {
 					new EditorFrame(null).attachDefault();
-				}
 			});
 			
 			JButton btnSave = new JButton();
-			btnSave.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/save_btn.png")));
+			btnSave.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_SAVE)));
 			btnSave.setOpaque(false);
 			btnSave.setBorder(border);
 			btnSave.setToolTipText("Save");
 			btnSave.setFocusable(false);
 			toolBar1.add(btnSave);
-			btnSave.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Editor ed = SystemHandler.getSelectedEditor();
-					if (ed != null) ed.save();
-				}
+			btnSave.addActionListener((e) -> {
+				Editor ed = SystemHandler.getSelectedEditor();
+				if (ed != null) ed.save();
 			});
 		}
 		
@@ -410,33 +369,27 @@ public final class MainFrame extends JFrame implements ExeListener {
 			toolBar2.setBackground(ColorSet.boxOutColor);
 			
 			JButton btnUndo = new JButton();
-			btnUndo.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/back_btn.png")));
+			btnUndo.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_ACTION_BACK)));
 			btnUndo.setOpaque(false);
 			btnUndo.setBorder(border);
 			btnUndo.setToolTipText("Undo");
 			btnUndo.setFocusable(false);
 			toolBar2.add(btnUndo);
-			btnUndo.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Editor ed = SystemHandler.getSelectedEditor();
-					if (ed != null) ed.undo();
-				}
+			btnUndo.addActionListener((e) -> {
+				Editor ed = SystemHandler.getSelectedEditor();
+				if (ed != null) ed.undo();
 			});
 			
 			JButton btnRedo = new JButton();
-			btnRedo.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/for_btn.png")));
+			btnRedo.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_ACTION_FOR)));
 			btnRedo.setOpaque(false);
 			btnRedo.setBorder(border);
 			btnRedo.setToolTipText("Redo");
 			btnRedo.setFocusable(false);
 			toolBar2.add(btnRedo);
-			btnRedo.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Editor ed = SystemHandler.getSelectedEditor();
-					if (ed != null) ed.redo();
-				}
+			btnRedo.addActionListener((e) -> {
+				Editor ed = SystemHandler.getSelectedEditor();
+				if (ed != null) ed.redo();
 			});
 		}
 		
@@ -456,17 +409,14 @@ public final class MainFrame extends JFrame implements ExeListener {
 			toolBar3.setBackground(ColorSet.boxOutColor);
 			
 			JButton btnCompileAll = new JButton();
-			btnCompileAll.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/comp_btn.png")));
+			btnCompileAll.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_GREEN_GEAR)));
 			btnCompileAll.setOpaque(false);
 			btnCompileAll.setBorder(border);
 			btnCompileAll.setToolTipText("Compile All");
 			btnCompileAll.setFocusable(false);
 			toolBar3.add(btnCompileAll);
-			btnCompileAll.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SystemHandler.compileAll();
-				}
+			btnCompileAll.addActionListener((e) -> {
+				SystemHandler.compileAll();
 			});
 			
 			JCheckBox cbxExeAddress = new JCheckBox("Start Address:");
@@ -484,78 +434,66 @@ public final class MainFrame extends JFrame implements ExeListener {
 			tfExeAddress.setBorder(border);
 			tfExeAddress.setBackground(ColorSet.boxInColor);
 			tfExeAddress.setForeground(ColorSet.boxTextColor);
-			tfExeAddress.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					String s = tfExeAddress.getText();
-					if (s.length() == 4) {
-						if (!ByteUtil.validHex(s)) tfExeAddress.setText("0000");
-					} else tfExeAddress.setText("0000");
-				}
+			tfExeAddress.addActionListener((e) -> {
+				String s = tfExeAddress.getText();
+				if (s.length() == 4) {
+					if (!ByteUtil.validHex(s)) tfExeAddress.setText("0000");
+				} else tfExeAddress.setText("0000");
 			});
 			
 			btnExeAll = new JButton();
-			btnExeAll.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_btn_disable.png")));
-			btnExeAll.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_btn.png")));
+			btnExeAll.setDisabledIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_DISABLED)));
+			btnExeAll.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_ENABLED)));
 			btnExeAll.setOpaque(false);
 			btnExeAll.setBorder(border);
 			btnExeAll.setToolTipText("Execute");
 			btnExeAll.setFocusable(false);
 			toolBar3.add(btnExeAll);
-			btnExeAll.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int adr = 0;
-					if (cbxExeAddress.isSelected()) {
-						String s = tfExeAddress.getText();
-						if (s.length() == 4) {
-							if (ByteUtil.validHex(s)) {
-								adr = Integer.parseInt(s, 16);
-							} else tfExeAddress.setText("0000");
+			btnExeAll.addActionListener((e) -> {
+				int adr = 0;
+				if (cbxExeAddress.isSelected()) {
+					String s = tfExeAddress.getText();
+					if (s.length() == 4) {
+						if (ByteUtil.validHex(s)) {
+							adr = Integer.parseInt(s, 16);
 						} else tfExeAddress.setText("0000");
-					} else adr = SystemHandler.getExecuter().getStartAddress();
-					SystemHandler.getExecuter().start(adr);
-				}
+					} else tfExeAddress.setText("0000");
+				} else adr = SystemHandler.getExecuter().getStartAddress();
+				SystemHandler.getExecuter().start(adr);
 			});
 			
 			btnExeLine = new JButton();
-			btnExeLine.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_line_btn_disable.png")));
-			btnExeLine.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_line_btn.png")));
+			btnExeLine.setDisabledIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_LINE_DISABLED)));
+			btnExeLine.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_LINE_ENABLED)));
 			btnExeLine.setOpaque(false);
 			btnExeLine.setBorder(border);
 			btnExeLine.setToolTipText("Execute single line");
 			btnExeLine.setFocusable(false);
 			toolBar3.add(btnExeLine);
-			btnExeLine.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int adr = 0;
-					if (cbxExeAddress.isSelected()) {
-						String s = tfExeAddress.getText();
-						if (s.length() == 4) {
-							if (ByteUtil.validHex(s)) {
-								adr = Integer.parseInt(s, 16);
-							} else tfExeAddress.setText("0000");
+			btnExeLine.addActionListener((e) -> {
+				int adr = 0;
+				if (cbxExeAddress.isSelected()) {
+					String s = tfExeAddress.getText();
+					if (s.length() == 4) {
+						if (ByteUtil.validHex(s)) {
+							adr = Integer.parseInt(s, 16);
 						} else tfExeAddress.setText("0000");
-					} else adr = SystemHandler.getExecuter().getStartAddress();
-					SystemHandler.getExecuter().startSignleLine(adr);
-				}
+					} else tfExeAddress.setText("0000");
+				} else adr = SystemHandler.getExecuter().getStartAddress();
+				SystemHandler.getExecuter().startSignleLine(adr);
 			});
 			
 			btnExeStop = new JButton();
-			btnExeStop.setDisabledIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_stop_btn_disable.png")));
-			btnExeStop.setIcon(new ImageIcon(MainFrame.class.getResource("/jetengine/exe_stop_btn.png")));
+			btnExeStop.setDisabledIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_STOP_DISABLED)));
+			btnExeStop.setIcon(new ImageIcon(MainFrame.class.getResource(Assets.ICON_EXECUTE_STOP_ENABLED)));
 			btnExeStop.setOpaque(false);
 			btnExeStop.setBorder(border);
 			btnExeStop.setToolTipText("Execute stop");
 			btnExeStop.setFocusable(false);
 			btnExeStop.setEnabled(false);
 			toolBar3.add(btnExeStop);
-			btnExeStop.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SystemHandler.getExecuter().stop();
-				}
+			btnExeStop.addActionListener((e) -> {
+				SystemHandler.getExecuter().stop();
 			});
 		}
 

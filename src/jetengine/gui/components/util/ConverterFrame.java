@@ -1,27 +1,28 @@
-package jetengine.gui;
+package jetengine.gui.components.util;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.GUIToolBar;
 import jetengine.sys.ByteUtil;
 
 import javax.swing.SwingConstants;
 
-final class ConverterFrame extends AbstractGUIComponent {
+public final class ConverterFrame extends AbstractGUIComponent {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final JTextField tfHex;
-	private final JTextField tfDec;
-	private final JTextField tfBin;
+	private JTextField tfHex;
+	private JTextField tfDec;
+	private JTextField tfBin;
 
 	public ConverterFrame() {
 		super("Converter");
@@ -43,16 +44,13 @@ final class ConverterFrame extends AbstractGUIComponent {
 		tfHex.setForeground(ColorSet.boxTextColor);
 		tfHex.setFont(fD);
 		tfHex.setCaretColor(ColorSet.caretColor);
-		tfHex.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int i = 0;
-				if (!ByteUtil.validHex(tfHex.getText())) {
-					tfHex.setText("0");
-				} i = Integer.parseInt(tfHex.getText(), 16);
-				tfBin.setText(Integer.toBinaryString(i));
-				tfDec.setText(""+i);
-			}
+		tfHex.addActionListener((e) -> {
+			int i = 0;
+			if (!ByteUtil.validHex(tfHex.getText())) {
+				tfHex.setText("0");
+			} i = Integer.parseInt(tfHex.getText(), 16);
+			tfBin.setText(Integer.toBinaryString(i));
+			tfDec.setText(""+i);
 		});
 		
 		JLabel lblDec = new JLabel("Decimal");
@@ -67,19 +65,16 @@ final class ConverterFrame extends AbstractGUIComponent {
 		tfDec.setForeground(ColorSet.boxTextColor);
 		tfDec.setFont(fD);
 		tfDec.setCaretColor(ColorSet.caretColor);
-		tfDec.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int i = 0;
-				try {
-					i = Integer.parseInt(tfDec.getText());
-				} catch (NumberFormatException e2) {
-					i = 0;
-					tfDec.setText(""+0);
-				}
-				tfHex.setText(Integer.toHexString(i));
-				tfBin.setText(Integer.toBinaryString(i));
+		tfDec.addActionListener((e) -> {
+			int i = 0;
+			try {
+				i = Integer.parseInt(tfDec.getText());
+			} catch (NumberFormatException e2) {
+				i = 0;
+				tfDec.setText(""+0);
 			}
+			tfHex.setText(Integer.toHexString(i));
+			tfBin.setText(Integer.toBinaryString(i));
 		});
 		
 		JLabel lblBin = new JLabel("Binary");
@@ -94,19 +89,16 @@ final class ConverterFrame extends AbstractGUIComponent {
 		tfBin.setForeground(ColorSet.boxTextColor);
 		tfBin.setFont(fD);
 		tfBin.setCaretColor(ColorSet.caretColor);
-		tfBin.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int i = 0;
-				try {
-					i = Integer.parseInt(tfBin.getText(), 2);
-				} catch (NumberFormatException e2) {
-					i = 0;
-					tfBin.setText(""+0);
-				}
-				tfHex.setText(Integer.toHexString(i));
-				tfDec.setText(""+i);
+		tfBin.addActionListener((e) -> {
+			int i = 0;
+			try {
+				i = Integer.parseInt(tfBin.getText(), 2);
+			} catch (NumberFormatException e2) {
+				i = 0;
+				tfBin.setText(""+0);
 			}
+			tfHex.setText(Integer.toHexString(i));
+			tfDec.setText(""+i);
 		});
 		
 		GroupLayout groupLayout = new GroupLayout(this);

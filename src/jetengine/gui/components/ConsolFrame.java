@@ -1,5 +1,7 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
 import jetengine.sys.SystemHandler;
 import jetengine.sys.event.ConsolListener;
 
@@ -10,7 +12,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.Font;
 
-final class ConsolFrame extends AbstractGUIComponent implements ConsolListener {
+public final class ConsolFrame extends AbstractGUIComponent implements ConsolListener {
 
 	private static final long serialVersionUID = 1L;
 	private final JTextPane textPane;

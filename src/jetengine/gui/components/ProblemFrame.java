@@ -1,4 +1,4 @@
-package jetengine.gui;
+package jetengine.gui.components;
 
 import java.awt.Font;
 import java.util.List;
@@ -12,10 +12,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
 import jetengine.sys.SystemHandler;
 import jetengine.sys.event.ProblemListener;
 
-final class ProblemFrame extends AbstractGUIComponent implements ProblemListener {
+public final class ProblemFrame extends AbstractGUIComponent implements ProblemListener {
 	
 
 	private static final long serialVersionUID = 1L;

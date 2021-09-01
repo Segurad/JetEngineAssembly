@@ -1,4 +1,4 @@
-package jetengine.gui;
+package jetengine.gui.components.cpu;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -8,16 +8,18 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
+import jetengine.gui.components.AbstractGUIComponent;
+import jetengine.gui.components.GUIToolBar;
 import jetengine.sys.SystemHandler;
 
-final class PortFrame extends AbstractGUIComponent {
+public final class PortFrame extends AbstractGUIComponent {
 
 	private PortPanel[] panels = new PortPanel[5];
 	private final JScrollPane scrollPane;
@@ -29,11 +31,8 @@ final class PortFrame extends AbstractGUIComponent {
 		setPreferredSize(getMinimumSize());
 		
 		JButton btnNew = new JButton("Neuer Port");
-		btnNew.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		btnNew.addActionListener((e) -> {
 				addPortPanel();
-			}
 		});;
 		btnNew.setBackground(ColorSet.boxButton);
 		btnNew.setFocusable(false);
