@@ -106,23 +106,23 @@ public class Executer {
 		}
 		if (SystemHandler.getTRAP()) {
 			SystemHandler.setTRAP(false);
-			Operation.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
+			OperationRegistry.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
 			r.setPC(0x0024);
 		} else if (r.getIeff() == 1) {
 			if (r.getI7() == 1 && r.getM75() == 0) {
 				r.setIeff((byte) 0);
 				r.setI7((byte) 0);
-				Operation.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
+				OperationRegistry.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
 				r.setPC(0x003C);
 			} else if (r.getI6() == 1 && r.getM65() == 0) {
 				r.setIeff((byte) 0);
 				r.setI6((byte) 0);
-				Operation.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
+				OperationRegistry.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
 				r.setPC(0x0034);
 			} else if (r.getI5() == 1 && r.getM55() == 0) {
 				r.setIeff((byte) 0);
 				r.setI5((byte) 0);
-				Operation.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
+				OperationRegistry.PUSH.invoke(Address.REG_PC1, Address.REG_PC2, (byte) 0, (byte) 0);
 				r.setPC(0x002C);
 			} else if (SystemHandler.getINTR() >= 0) {
 				int i = SystemHandler.getINTR();
@@ -130,28 +130,28 @@ public class Executer {
 				SystemHandler.setINTR(-1);
 				switch (i) {
 				case 0:
-					Operation.RST.invoke(Address.RST_0, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_0, null, (byte) 0, (byte) 0);
 					break;
 				case 1:
-					Operation.RST.invoke(Address.RST_1, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_1, null, (byte) 0, (byte) 0);
 					break;
 				case 2:
-					Operation.RST.invoke(Address.RST_2, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_2, null, (byte) 0, (byte) 0);
 					break;
 				case 3:
-					Operation.RST.invoke(Address.RST_3, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_3, null, (byte) 0, (byte) 0);
 					break;
 				case 4:
-					Operation.RST.invoke(Address.RST_4, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_4, null, (byte) 0, (byte) 0);
 					break;
 				case 5:
-					Operation.RST.invoke(Address.RST_5, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_5, null, (byte) 0, (byte) 0);
 					break;
 				case 6:
-					Operation.RST.invoke(Address.RST_6, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_6, null, (byte) 0, (byte) 0);
 					break;
 				case 7:
-					Operation.RST.invoke(Address.RST_7, null, (byte) 0, (byte) 0);
+					OperationRegistry.RST.invoke(Address.RST_7, null, (byte) 0, (byte) 0);
 					break;
 				}
 			}
