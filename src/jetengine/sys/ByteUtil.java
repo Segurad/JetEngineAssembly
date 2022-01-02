@@ -2,29 +2,10 @@ package jetengine.sys;
 
 public final class ByteUtil {
 
-	public static byte bitwiseNOT(byte bytee) {
-		return (byte) ~bytee;
-	}
-	
-	public static byte bitwiseAND(byte bytee, byte mask) {
-		return (byte) (bytee & mask);
-	}
-	
-	public static byte bitwiseOR(byte bytee, byte mask) {
-		return (byte) (bytee | mask);
-	}
-	
 	public static byte bitwiseXOP(byte bytee, byte mask) {
 		return (byte) (bytee ^ mask);
 	}
 	
-	public static byte shiftLeft(byte bytee, int times) {
-		return (byte) (bytee << times);
-	}
-	
-	public static byte shiftRight(byte bytee, int times) {
-		return (byte) (bytee >>> times);
-	}
 	/**
 	 * 
 	 * @param bytee the byte
@@ -32,8 +13,7 @@ public final class ByteUtil {
 	 * @return 1 or 0
 	 */
 	public static byte getBit(byte bytee, int pos) {
-		String s = ByteUtil.toBinaryString(bytee);
-		return (byte) (s.charAt(7 - pos) == '1' ? 1 : 0);
+		return (byte) ((bytee >> pos) & 0x1);
 	}
 	
 	/**
@@ -56,22 +36,8 @@ public final class ByteUtil {
 		return (byte) (bytee & ~(1 << pos));
 	}
 	
-	/**
-	 * 
-	 * @param bytee
-	 * @param pos
-	 * @return a new byte
-	 */
-	public static byte invertBit(byte bytee, int pos) {
-		return (byte) (bytee ^ (1 << pos));
-	}
-	
 	public static int toInt(byte bytee1, byte bytee2) {
 		return bytee1 << 8 + bytee2;
-	}
-	
-	public static int toUnsignedByte(byte bytee) {
-		return bytee & 0xFF;
 	}
 
 	public static byte highByte(int val) {
@@ -96,7 +62,7 @@ public final class ByteUtil {
 	}
 	
 	public static String toBinaryString(byte bytee) {
-		return toBinaryString(ByteUtil.toUnsignedByte(bytee));
+		return toBinaryString((int) bytee);
 	}
 	
 	public static String toBinaryString(int value) {
@@ -107,6 +73,12 @@ public final class ByteUtil {
 		return binstr;
 	}
 	
+	/**
+	 * Returns the int value as hex and adds 0 to match the length
+	 * @param value
+	 * @param length
+	 * @return hex String
+	 */
 	public static String toHex(int value, int length) {
 		String hexstr = Integer.toHexString(value);
 		hexstr = hexstr.toUpperCase();
@@ -117,6 +89,6 @@ public final class ByteUtil {
 	}
 	
 	public static String toHex(byte value, int length) {
-		return toHex(toUnsignedByte(value), length);
+		return toHex((int) value, length);
 	}
 }

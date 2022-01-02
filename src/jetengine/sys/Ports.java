@@ -16,13 +16,13 @@ public class Ports {
 	}
 	
 	public byte getValue(byte port) {
-		int index = ByteUtil.toUnsignedByte(port);
+		int index = port & 0xFF;
 		if (mem[index] == null) return 0;
 		return mem[index];
 	}
 	
 	public void set(byte x, byte value, boolean update) {
-		int index = ByteUtil.toUnsignedByte(x);
+		int index = x & 0xFF;
 		mem[index] = value;
 		if (update) {
 			for (PortListener pl : listeners) {

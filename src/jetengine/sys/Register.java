@@ -29,7 +29,7 @@ public class Register {
 		//set Sign
 		if (binstr.charAt(0) == '0') setS((byte) 0); else setS((byte) 1);
 		//set Zero
-		if (ByteUtil.toUnsignedByte(value) == 0) setZ((byte) 1); else setZ((byte) 0);
+		if (value == 0) setZ((byte) 1); else setZ((byte) 0);
 		//set Parity
 		int counter = 0;
 		for (int i = 0; i < binstr.length(); i++) {

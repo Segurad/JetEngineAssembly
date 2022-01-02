@@ -51,7 +51,7 @@ public final class Memory {
 	public void set(int key, byte value, boolean update) {
 		mem[key] = value;
 		if (update) for (MemListener l : listeners) {
-			if (l.getRangeMin() <= key && key <= l.getRangeMax()) l.update(key-l.getRangeMin(), new int[] {ByteUtil.toUnsignedByte(value)});
+			if (l.getRangeMin() <= key && key <= l.getRangeMax()) l.update(key-l.getRangeMin(), new int[] { value & 0xFF });
 		}
 	}
 	

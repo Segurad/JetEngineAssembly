@@ -1,7 +1,6 @@
 package jetengine.sys;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -66,7 +65,7 @@ public class FileIO {
 	}
 	
 	public static boolean importProject(File file) throws IOException {
-		final FileInputStream in = new FileInputStream(file);
+		//final FileInputStream in = new FileInputStream(file);
 		return true;
 	}
 }

@@ -57,8 +57,8 @@ class OperationRegistry {
 
 	static {
 		ADD = (part1, part2, value1, value2) -> {
-			int val1 = ByteUtil.toUnsignedByte(Address.REG_A.get());
-			int val2 = ByteUtil.toUnsignedByte(part1 != null ? part1.get() : value1);
+			int val1 = Address.REG_A.get() & 0xFF;
+			int val2 = (part1 != null ? part1.get() : value1) & 0xFF;
 			int newval = val1 + val2;
 			Register r = SystemHandler.getRegister();
 			if (newval> 0xFF) r.setCy((byte) 1);
@@ -75,14 +75,14 @@ class OperationRegistry {
 		ANA = (part1, part2, value1, value2) -> {
 			Register r = SystemHandler.getRegister();
 			byte mask = part1 != null ? part1.get() : value1;
-			r.setRegWithFlags(Address.REG_A, (byte) ByteUtil.bitwiseAND(r.getA(), mask));
+			r.setRegWithFlags(Address.REG_A, (byte) (r.getA() & mask));
 			r.setAc((byte) 0);
 			r.setCy((byte) 1);
 		};
 		ADC = (part1, part2, value1, value2) -> {
 			Register r = SystemHandler.getRegister();
-			int val1 = ByteUtil.toUnsignedByte(Address.REG_A.get());
-			int val2 = ByteUtil.toUnsignedByte(part1 != null ? part1.get() : value1);
+			int val1 = Address.REG_A.get() & 0xFF;
+			int val2 = (part1 != null ? part1.get() : value1) & 0xFF;
 			int newval = val1 + val2;
 			{
 				String s = ByteUtil.toBinaryString(val1);
@@ -91,7 +91,7 @@ class OperationRegistry {
 				int tval2 = Integer.parseInt(s.substring(4));
 				if (tval1 + tval2 > 0xF) r.setAc((byte) 1); else r.setAc((byte) 0);
 			}
-			val2 = ByteUtil.toUnsignedByte(Address.FLAG_CY.get());
+			val2 = Address.FLAG_CY.get() & 0xFF;
 			if (r.getAc() == 0) {
 				newval += val2;
 				{
@@ -165,7 +165,7 @@ class OperationRegistry {
 			r.setL(ByteUtil.lowByte(res));
 		};
 		DCR = (part1, part2, value1, value2) -> {
-			int val1 = ByteUtil.toUnsignedByte(part1.get());
+			int val1 = part1.get() & 0xFF;
 			int val2 = 1;
 			int newval = val1 - val2;
 			Register r = SystemHandler.getRegister();
@@ -199,7 +199,7 @@ class OperationRegistry {
 			SystemHandler.getPorts().set(value1, Address.REG_A.get(), true);
 		};
 		INR = (part1, part2, value1, value2) -> {
-			int val1 = ByteUtil.toUnsignedByte(part1.get());
+			int val1 = part1.get() & 0xFF;
 			int val2 = 1;
 			int newval = val1 + val2;
 			Register r = SystemHandler.getRegister();
@@ -250,7 +250,7 @@ class OperationRegistry {
 		ORA = (part1, part2, value1, value2) -> {
 			Register r = SystemHandler.getRegister();
 			byte mask = part1 != null ? part1.get() : value1;
-			r.setRegWithFlags(Address.REG_A, ByteUtil.bitwiseOR(Address.REG_A.get(), mask));
+			r.setRegWithFlags(Address.REG_A, (byte) (Address.REG_A.get() | mask));
 			r.setAc((byte) 0);
 			r.setCy((byte) 0);
 		};
@@ -283,7 +283,7 @@ class OperationRegistry {
 		RAL = (part1, part2, value1, value2) -> {
 			byte b = Address.REG_A.get();
 			byte cy = ByteUtil.getBit(b, 7);
-			b = ByteUtil.shiftLeft(b, 1);
+			b <<= 1;
 			b = (Address.FLAG_CY.get() == 1 ? ByteUtil.setBit(b, 0) : ByteUtil.resetBit(b, 0));
 			Address.FLAG_CY.set(cy);
 			Address.REG_A.set(b);
@@ -291,7 +291,7 @@ class OperationRegistry {
 		RLC = (part1, part2, value1, value2) -> {
 			byte b = Address.REG_A.get();
 			byte cy = ByteUtil.getBit(b, 7);
-			b = ByteUtil.shiftLeft(b, 1);
+			b <<= 1;
 			b = (cy == 1 ? ByteUtil.setBit(b, 0) : ByteUtil.resetBit(b, 0));
 			Address.FLAG_CY.set(cy);
 			Address.REG_A.set(b);
@@ -299,7 +299,7 @@ class OperationRegistry {
 		RAR = (part1, part2, value1, value2) -> {
 			byte b = Address.REG_A.get();
 			byte cy = ByteUtil.getBit(b, 0);
-			b = ByteUtil.shiftRight(b, 1);
+			b >>>= 1;
 			b = (Address.FLAG_CY.get() == 1 ? ByteUtil.setBit(b, 7) : ByteUtil.resetBit(b, 7));
 			Address.FLAG_CY.set(cy);
 			Address.REG_A.set(b);
@@ -307,7 +307,7 @@ class OperationRegistry {
 		RRC = (part1, part2, value1, value2) -> {
 			byte b = Address.REG_A.get();
 			byte cy = ByteUtil.getBit(b, 0);
-			b = ByteUtil.shiftRight(b, 1);
+			b >>>= 1;
 			b = (cy == 1 ? ByteUtil.setBit(b, 7) : ByteUtil.resetBit(b, 7));
 			Address.FLAG_CY.set(cy);
 			Address.REG_A.set(b);
@@ -352,8 +352,8 @@ class OperationRegistry {
 		};
 		SBB = (part1, part2, value1, value2) -> {
 			Register r = SystemHandler.getRegister();
-			int val1 = ByteUtil.toUnsignedByte(Address.REG_A.get());
-			int val2 = ByteUtil.toUnsignedByte(part1 != null ? part1.get() : value1);
+			int val1 = Address.REG_A.get() & 0xFF;
+			int val2 = (part1 != null ? part1.get() : value1) & 0xFF;
 			int newval = val1 - val2;
 			{
 				String s = ByteUtil.toBinaryString(val1);
@@ -362,7 +362,7 @@ class OperationRegistry {
 				int tval2 = Integer.parseInt(s.substring(4));
 				if (tval1 < tval2) r.setAc((byte) 1); else r.setAc((byte) 0);
 			}
-			val2 = ByteUtil.toUnsignedByte(Address.FLAG_CY.get());
+			val2 = Address.FLAG_CY.get() & 0xFF;
 			if (r.getAc() == 0) {
 				newval -= val2;
 				{
@@ -389,8 +389,8 @@ class OperationRegistry {
 			SystemHandler.getRegister().setCy((byte) 1);
 		};
 		SUB = (part1, part2, value1, value2) -> {
-			int val1 = ByteUtil.toUnsignedByte(Address.REG_A.get());
-			int val2 = ByteUtil.toUnsignedByte(part1 != null ? part1.get() : value1);
+			int val1 = Address.REG_A.get() & 0xFF;
+			int val2 = (part1 != null ? part1.get() : value1) & 0xFF;
 			int newval = val1 - val2;
 			Register r = SystemHandler.getRegister();
 			if (newval<0) {

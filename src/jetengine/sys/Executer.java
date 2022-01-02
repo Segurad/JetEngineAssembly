@@ -79,7 +79,7 @@ public class Executer {
 		if (size == 2) {
 			pc++;
 			val1 = m.getValue(pc);
-			s = s + " " + ByteUtil.toHex(ByteUtil.toUnsignedByte(val1), 2);
+			s = s + " " + ByteUtil.toHex(val1 & 0xFF, 2);
 		}
 		if (size >= 3) {
 			pc++;
