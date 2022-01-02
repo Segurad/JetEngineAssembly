@@ -29,8 +29,8 @@ public final class MemFrame extends AbstractGUIComponent implements MemListener 
 
 	private static final long serialVersionUID = 1L;
 	private final JTable table;
-	private final JTextField txtStart;
-	private final JTextField txtEnd;
+	private final JTextField tfStart;
+	private final JTextField tfEnd;
 	private int start = 0, end = 16;
 	
 	public MemFrame() {
@@ -53,29 +53,29 @@ public final class MemFrame extends AbstractGUIComponent implements MemListener 
 		lblValue.setHorizontalAlignment(SwingConstants.CENTER);
 		lblValue.setFont(new Font("Consolas", Font.BOLD, 14));
 		
-		txtStart = new JTextField("0000");
-		txtStart.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStart.setForeground(ColorSet.boxTextColor);
-		txtStart.setBackground(ColorSet.boxInColor);
-		txtStart.setFont(new Font("Consolas", Font.PLAIN, 14));
-		txtStart.setColumns(10);
-		txtStart.setBorder(null);
-		txtStart.addActionListener((e) -> {
+		tfStart = new JTextField("0000");
+		tfStart.setHorizontalAlignment(SwingConstants.CENTER);
+		tfStart.setForeground(ColorSet.boxTextColor);
+		tfStart.setBackground(ColorSet.boxInColor);
+		tfStart.setFont(new Font("Consolas", Font.PLAIN, 14));
+		tfStart.setColumns(10);
+		tfStart.setBorder(null);
+		tfStart.addActionListener((e) -> {
 				updateALL();
 		});
-		txtStart.setCaretColor(ColorSet.caretColor);
+		tfStart.setCaretColor(ColorSet.caretColor);
 		
-		txtEnd = new JTextField("0010");
-		txtEnd.setHorizontalAlignment(SwingConstants.CENTER);
-		txtEnd.setForeground(ColorSet.boxTextColor);
-		txtEnd.setBackground(ColorSet.boxInColor);
-		txtEnd.setFont(new Font("Consolas", Font.PLAIN, 14));
-		txtEnd.setColumns(10);
-		txtEnd.setBorder(null);
-		txtEnd.addActionListener((e) -> {
+		tfEnd = new JTextField("0010");
+		tfEnd.setHorizontalAlignment(SwingConstants.CENTER);
+		tfEnd.setForeground(ColorSet.boxTextColor);
+		tfEnd.setBackground(ColorSet.boxInColor);
+		tfEnd.setFont(new Font("Consolas", Font.PLAIN, 14));
+		tfEnd.setColumns(10);
+		tfEnd.setBorder(null);
+		tfEnd.addActionListener((e) -> {
 			updateALL();
 		});
-		txtEnd.setCaretColor(ColorSet.caretColor);
+		tfEnd.setCaretColor(ColorSet.caretColor);
 		
 		JLabel lblStart = new JLabel("Start");
 		lblStart.setFont(new Font("Consolas", Font.BOLD, 14));
@@ -105,8 +105,8 @@ public final class MemFrame extends AbstractGUIComponent implements MemListener 
 								.addComponent(lblEnd))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtStart, 0, 0, Short.MAX_VALUE)
-								.addComponent(txtEnd, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
+								.addComponent(tfStart, 0, 0, Short.MAX_VALUE)
+								.addComponent(tfEnd, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnUpdate))
 						.addGroup(groupLayout.createSequentialGroup()
@@ -126,10 +126,10 @@ public final class MemFrame extends AbstractGUIComponent implements MemListener 
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblStart)
-								.addComponent(txtStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(tfStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tfEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblEnd)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(7)
@@ -187,20 +187,10 @@ public final class MemFrame extends AbstractGUIComponent implements MemListener 
 	}
 
 	private void updateALL() {
-		if (txtStart.getText().length() != 4 || !ByteUtil.validHex(txtStart.getText())) {
-			SystemHandler.sendMessage(Message.NO_VALID_HEX);
-			txtStart.setText("0000");
-			start = 0;
-		} else {
-			start = Integer.parseInt(txtStart.getText(), 16);
-		}
-		if (txtEnd.getText().length() != 4 || !ByteUtil.validHex(txtEnd.getText())) {
-			SystemHandler.sendMessage(Message.NO_VALID_HEX);
-			txtEnd.setText("0010");
-			end = 16;
-		} else {
-			end = Integer.parseInt(txtEnd.getText(), 16);
-		}
+		start = MainFrame.validateHexInput(tfStart, 4, 0);
+		if (start == -1) start = 0;
+		end = MainFrame.validateHexInput(tfEnd, 4, 16);
+		if (end == -1) end = 16;
 		if (start > end) {
 			SystemHandler.sendMessage(Message.MEM_START_TO_HIGH);
 			return;

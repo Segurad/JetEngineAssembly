@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 
 import jetengine.gui.BaseFrame;
 import jetengine.gui.ColorSet;
+import jetengine.gui.MainFrame;
 import jetengine.sys.ByteUtil;
 import jetengine.sys.Memory;
 import jetengine.sys.SystemHandler;
@@ -197,28 +198,11 @@ public final class OptionFrameMem extends BaseFrame {
 	}
 
 	private boolean checkAddress() {
-		if (tfStart.getText().length() == 4) {
-			if (ByteUtil.validHex(tfStart.getText())) {
-				start = Integer.parseInt(tfStart.getText(), 16);
-			} else {
-				tfStart.setText("0000");
-				return false;
-			}
-		} else {
-			tfStart.setText("0000");
-			return false;
-		}
-		if (tfEnd.getText().length() == 4) {
-			if (ByteUtil.validHex(tfEnd.getText())) {
-				end = Integer.parseInt(tfEnd.getText(),16);
-			} else {
-				tfEnd.setText("0010");
-				return false;
-			}
-		} else {
-			tfEnd.setText("0010");
-			return false;
-		}
+		int num = MainFrame.validateHexInput(tfStart, 4, 0);
+		if (num == -1) return false;
+		start = num;
+		num = MainFrame.validateHexInput(tfEnd, 4, 16);
+		if (num == -1) return false;
 		if (end < start) {
 			tfStart.setText("0000");
 			tfEnd.setText("0010");

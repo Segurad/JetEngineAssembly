@@ -54,6 +54,8 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 	private final JTabbedPane tp1, tp2, tp3, tp4;
 	private static MainFrame instance;
 	private JButton btnExeAll, btnExeLine, btnExeStop;
+	private JTextField tfExeAddress;
+	private JCheckBox cbxExeAddress;
 	
 	public MainFrame() {
 		super(Message.JETENGINE+Config.verison);
@@ -419,13 +421,13 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 				SystemHandler.compileAll();
 			});
 			
-			JCheckBox cbxExeAddress = new JCheckBox("Start Address:");
+			cbxExeAddress = new JCheckBox("Start Address:");
 			toolBar3.add(cbxExeAddress);
 			cbxExeAddress.setFocusable(false);
 			cbxExeAddress.setBackground(ColorSet.boxOutColor);
 			cbxExeAddress.setForeground(ColorSet.boxTextColor);
 			
-			JTextField tfExeAddress = new JTextField("0000");
+			tfExeAddress = new JTextField("0000");
 			tfExeAddress.setMaximumSize(new Dimension(50, 30));
 			tfExeAddress.setFont(new Font("Consolas", Font.PLAIN, 14));
 			tfExeAddress.setHorizontalAlignment(SwingConstants.CENTER);
@@ -450,16 +452,7 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 			btnExeAll.setFocusable(false);
 			toolBar3.add(btnExeAll);
 			btnExeAll.addActionListener((e) -> {
-				int adr = 0;
-				if (cbxExeAddress.isSelected()) {
-					String s = tfExeAddress.getText();
-					if (s.length() == 4) {
-						if (ByteUtil.validHex(s)) {
-							adr = Integer.parseInt(s, 16);
-						} else tfExeAddress.setText("0000");
-					} else tfExeAddress.setText("0000");
-				} else adr = SystemHandler.getExecuter().getStartAddress();
-				SystemHandler.getExecuter().start(adr);
+				SystemHandler.getExecuter().start(getExeStartAddress());
 			});
 			
 			btnExeLine = new JButton();
@@ -471,16 +464,7 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 			btnExeLine.setFocusable(false);
 			toolBar3.add(btnExeLine);
 			btnExeLine.addActionListener((e) -> {
-				int adr = 0;
-				if (cbxExeAddress.isSelected()) {
-					String s = tfExeAddress.getText();
-					if (s.length() == 4) {
-						if (ByteUtil.validHex(s)) {
-							adr = Integer.parseInt(s, 16);
-						} else tfExeAddress.setText("0000");
-					} else tfExeAddress.setText("0000");
-				} else adr = SystemHandler.getExecuter().getStartAddress();
-				SystemHandler.getExecuter().startSignleLine(adr);
+				SystemHandler.getExecuter().startSignleLine(getExeStartAddress());
 			});
 			
 			btnExeStop = new JButton();
@@ -499,7 +483,20 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 
 	}
 	
-    public void showOpen() {
+	/**
+	 * Reads the start address for execution
+	 */
+    private int getExeStartAddress() {
+    	int adr = -1;
+		if (cbxExeAddress.isSelected()) {
+			adr = validateHexInput(tfExeAddress, 4, 0);
+		} 
+		if (adr == -1) 
+			adr = SystemHandler.getExecuter().getStartAddress();
+		return adr;
+	}
+
+	public void showOpen() {
     	FileFilter simFilter= new FileFilter() {
 			@Override
 			public boolean accept(File file) {
@@ -567,6 +564,21 @@ public final class MainFrame extends BaseFrame implements ExeListener {
 			btnExeLine.setEnabled(true);
 			btnExeStop.setEnabled(false);
 		}
+	}
+	
+	/**
+	 * Returns the number of a hex input or resets and returns -1 the text field if invalid
+	 * @param tf
+	 * @param length number of digits
+	 * @param reset
+	 * @return number or -1
+	 */
+	public static int validateHexInput(JTextField tf, int length, int reset) {
+		if (tf.getText().length() > length || !ByteUtil.validHex(tf.getText())) {
+			tf.setText(ByteUtil.toHex(reset, length));
+			return -1;
+		}
+		return Integer.parseInt(tf.getText(), 16);
 	}
 
 }
