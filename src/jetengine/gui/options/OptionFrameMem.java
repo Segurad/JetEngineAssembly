@@ -117,7 +117,7 @@ public final class OptionFrameMem extends BaseFrame {
 		btnRandTF.setToolTipText("Random");
 		btnRandTF.setBackground(ColorSet.boxButton);
 		btnRandTF.setBorder(border);
-		btnRandTF.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/random_btn.png")));
+		btnRandTF.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/assets/random_btn.png")));
 		btnRandTF.addActionListener((e) -> {
 			tfSet.setText(ByteUtil.toHex(new Random().nextInt(0xFF+1), 2));
 		});

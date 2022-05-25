@@ -217,7 +217,7 @@ final class PortPanel extends JPanel implements PortListener {
 	@Override
 	public void update(byte value) {
 		String binstr=ByteUtil.toBinaryString(value);
-		lblValue.setText(ByteUtil.toHex(value, 2));
+		lblValue.setText(ByteUtil.toHex(value & 0xFF, 2));
 		System.out.println(port + " " + binstr);
 		p7.setSelected(binstr.charAt(0) == '0' ? false : true);
 		p6.setSelected(binstr.charAt(1) == '0' ? false : true);

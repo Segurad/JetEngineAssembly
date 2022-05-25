@@ -662,7 +662,7 @@ public final class OptionFrameReg extends BaseFrame {
 	private JButton createClearButton(JTextField tf) {
 		JButton btn = new JButton();
 		Border border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-		btn.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/clear_btn.png")));
+		btn.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/assets/clear_btn.png")));
 		btn.setBackground(ColorSet.boxButton);
 		btn.setBorder(border);
         btn.setToolTipText("Clear");
@@ -684,7 +684,7 @@ public final class OptionFrameReg extends BaseFrame {
 		btn.setFocusable(false);
 		btn.setBackground(ColorSet.boxButton);
 		btn.setBorder(border);
-		btn.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/random_btn.png")));
+		btn.setIcon(new ImageIcon(OptionFrameReg.class.getResource("/jetengine/assets/random_btn.png")));
 		btn.addActionListener((e) -> {
 			String s;
 			if (tf.getColumns() == 1) {

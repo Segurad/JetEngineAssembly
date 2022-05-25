@@ -61,7 +61,7 @@ public class Executer {
 		pc = pcCheck(pc);
 		
 		byte raw_opc = m.getValue(pc);
-		System.out.println("PC: " + ByteUtil.toHex(pc, 4) + " RawOPC: " + raw_opc + " Hex:" + ByteUtil.toHex(raw_opc, 2));
+		System.out.println("PC: " + ByteUtil.toHex(pc, 4) + " RawOPC: " + (raw_opc & 0xFF) + " Hex:" + ByteUtil.toHex(raw_opc, 2));
 		Opcode opc = Opcode.getOpcodeByHex(ByteUtil.toHex(raw_opc, 2));
 		if (opc == null) { 
 			errorOpcodeNull();

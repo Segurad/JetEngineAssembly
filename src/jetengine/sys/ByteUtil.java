@@ -62,7 +62,7 @@ public final class ByteUtil {
 	}
 	
 	public static String toBinaryString(byte bytee) {
-		return toBinaryString((int) bytee);
+		return toBinaryString(bytee & 0xFF);
 	}
 	
 	public static String toBinaryString(int value) {
@@ -89,6 +89,6 @@ public final class ByteUtil {
 	}
 	
 	public static String toHex(byte value, int length) {
-		return toHex((int) value, length);
+		return toHex(value & 0xFF, length);
 	}
 }
